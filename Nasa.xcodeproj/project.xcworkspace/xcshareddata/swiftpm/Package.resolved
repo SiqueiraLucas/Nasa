@@ -1,0 +1,33 @@
+{
+  "originHash" : "51aec1d8b508fc441e6f8740691cdda8604fa82788526a1f855b42088507b408",
+  "pins" : [
+    {
+      "identity" : "cartography",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/robb/Cartography.git",
+      "state" : {
+        "revision" : "b75197ea134f42b5feafb04b526b37eb1a41034b",
+        "version" : "4.0.0"
+      }
+    },
+    {
+      "identity" : "logviewer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fliper-projects/logviewer.git",
+      "state" : {
+        "revision" : "116e23ad2d2d8d0ad6d9b61c0925f82282ec94a0",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "promisekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mxcl/PromiseKit.git",
+      "state" : {
+        "revision" : "2bc44395edb4f8391902a9ff7c220471882a4d07",
+        "version" : "8.2.0"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LogVieweriOS",
+        "repositoryURL": "https://github.com/fliper-projects/logviewer.git",
+        "state": {
+          "branch": null,
+          "revision": "116e23ad2d2d8d0ad6d9b61c0925f82282ec94a0",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "PromiseKit",
+        "repositoryURL": "https://github.com/mxcl/PromiseKit.git",
+        "state": {
+          "branch": null,
+          "revision": "2bc44395edb4f8391902a9ff7c220471882a4d07",
+          "version": "8.2.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
