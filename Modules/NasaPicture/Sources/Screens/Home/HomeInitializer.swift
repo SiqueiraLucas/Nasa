@@ -1,10 +1,10 @@
-import UIKit
+import SwiftUI
 
 extension Home {
     enum Initializer {
-        static func createViewController(dependencies: Dependencies) -> UIViewController {
-            let viewController = HomeViewController()
-            return viewController
+        static func createView(dependencies: Dependencies) -> some View {
+            let view = HomeView()
+            return view
         }
     }
 }

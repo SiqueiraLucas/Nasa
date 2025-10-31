@@ -1,4 +1,4 @@
-import UIKit
+import SwiftUI
 
 public final class Feature {
     private let dependencies: Dependencies
@@ -7,7 +7,7 @@ public final class Feature {
         self.dependencies = dependencies
     }
 
-    public func initialViewController() -> UIViewController? {
-        return Home.Initializer.createViewController(dependencies: dependencies)
+    public func initialView() -> some View {
+        return Home.Initializer.createView(dependencies: dependencies)
     }
 }
