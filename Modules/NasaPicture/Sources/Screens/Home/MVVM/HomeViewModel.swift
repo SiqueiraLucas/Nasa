@@ -1,9 +1,15 @@
 import Foundation
 import SwiftUI
 import Combine
+import NasaNetworkInterface
 
-final class HomeViewModel: ObservableObject {
-    @Published var model: HomeModel = .empty
+protocol HomeViewModelProtocol where Self: ObservableObject {
+    var model: HomeModel { get set }
+    func build()
+}
+
+final class HomeViewModel: HomeViewModelProtocol {
+    @Published var model = HomeModel()
     
     private let dataProvider: HomeDataProviderProtocol
     
@@ -11,27 +17,34 @@ final class HomeViewModel: ObservableObject {
         self.dataProvider = dataProvider
     }
     
-    func fetch() {
-//        setLoading(true)
+    func build() {
+        model.state = .loading
         dataProvider.fetch()
             .done { [weak self] response in
                 self?.handleFetchSuccess(with: response)
-            }.ensure { [weak self] in
-//                self?.setLoading(false)
             }.catch { [weak self] error in
-                self?.handleFetchError(with: error)
+                let networkError = error as? NetworkError ?? .init(type: .unknown)
+                self?.handleFetchError(with: networkError)
             }
     }
     
     private func handleFetchSuccess(with response: Home.Response) {
-        model = HomeModel(
+        let data = HomeData(
             title: response.title,
             date: response.date,
             mainPhotoUrl: response.imageURL
         )
+        
+        model.state = .success(data)
     }
     
-    private func handleFetchError(with error: Error) {
-//        presentError()
+    private func handleFetchError(with error: NetworkError) {
+        model.state = .error(data: ErrorData(
+            title: "Erro inesperado",
+            description: error.localizedDescription,
+            buttonTitle: "Tentar novamente",
+            buttonAction: { [weak self] in
+                self?.build()
+            }))
     }
 }

@@ -1,13 +1,12 @@
 import Foundation
 
-struct HomeModel {
+struct HomeModel: BaseModel {
+    typealias DataType = HomeData
+    var state: ModelState<HomeData> = .loading
+}
+
+struct HomeData {
     let title: String
     let date: String
     let mainPhotoUrl: URL
-    
-    static let empty = Self(
-        title: "",
-        date: "",
-        mainPhotoUrl: URL(string: "https://example.com/test")!
-    )
 }

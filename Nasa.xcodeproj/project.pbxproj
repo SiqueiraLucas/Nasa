@@ -39,8 +39,6 @@
 		3A904BF92EB44899005A0EF8 /* Exceptions for "Nasa" folder in "Nasa" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Delegate/AppDelegate.swift,
-				Delegate/SceneDelegate.swift,
 				Resources/Info.plist,
 			);
 			target = 3A904BCD2EB44898005A0EF8 /* Nasa */;
