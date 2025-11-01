@@ -3,7 +3,8 @@ import NasaNetworkInterface
 import PromiseKit
 
 protocol HomeDataProviderProtocol {
-    func fetch() -> Promise<Home.Response>
+    func fetchPictureDay(date: String) -> Promise<Home.Response>
+    func fetchPictures(startDate: String, endDate: String) -> Promise<[Home.Response]>
 }
 
 final class HomeDataProvider: HomeDataProviderProtocol {
@@ -13,7 +14,16 @@ final class HomeDataProvider: HomeDataProviderProtocol {
         self.httpClient = httpClient
     }
 
-    func fetch() -> Promise<Home.Response> {
-        return httpClient.send(Home.Request())
+    func fetchPictureDay(date: String) -> Promise<Home.Response> {
+        return httpClient.send(Home.PictureDayRequest(
+            date: date
+        ))
+    }
+    
+    func fetchPictures(startDate: String, endDate: String) -> Promise<[Home.Response]> {
+        return httpClient.send(Home.PicturesRequest(
+            startDate: startDate,
+            endDate: endDate
+        ))
     }
 }

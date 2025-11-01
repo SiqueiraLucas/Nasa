@@ -62,3 +62,10 @@ Sourcery/Generated/
 fastlane/cc-test-reporter
 fastlane/cobertura.xml
 fastlane/html/
+
+# Custom Config
+*.xcconfig
+
+# Secrets / Keys
+*.env
+Secrets.plist

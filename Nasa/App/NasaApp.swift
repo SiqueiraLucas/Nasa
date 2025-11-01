@@ -12,7 +12,7 @@ struct NasaApp: App {
 
     init() {
         // Setup HTTP Client
-        let baseURL = URL(string: "about:blank")!
+        let baseURL = URL(string: "https://api.nasa.gov/planetary/apod")!
         let requestInfo = RequestInfo(baseURL: baseURL, defaultHeaders: [:])
         httpClient = HTTPClient(requestInfo: requestInfo)
 

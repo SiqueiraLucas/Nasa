@@ -45,12 +45,20 @@ import PromiseKit
 
 struct HomeView_Previews: PreviewProvider {
     class HomeDataProviderPreview: HomeDataProviderProtocol {
-        func fetch() -> Promise<Home.Response> {
-            return Promise.value(Home.Response(
-                title: "Mock Title",
-                date: "Mock Date",
-                imageURL: URL(string: "https://via.placeholder.com/150")!
-            ))
+        let mockResponse = Home.Response(
+            title: "Mock Title",
+            explanation: "Mocke Explanation",
+            date: "Mock Date",
+            imageHDUrl: URL(string: "https://via.placeholder.com/150")!,
+            imageURL: URL(string: "https://via.placeholder.com/150")!
+        )
+        
+        func fetchPictures(startDate: String, endDate: String) -> PromiseKit.Promise<[Home.Response]> {
+            return Promise.value(Array(repeating: mockResponse, count: 10))
+        }
+        
+        func fetchPictureDay(date: String) -> Promise<Home.Response> {
+            return Promise.value(mockResponse)
         }
     }
     

@@ -19,16 +19,16 @@ final class HomeViewModel: HomeViewModelProtocol {
     
     func build() {
         model.state = .loading
-        dataProvider.fetch()
+        dataProvider.fetchPictureDay(date: "2025-10-01")
             .done { [weak self] response in
-                self?.handleFetchSuccess(with: response)
+                self?.handleFetchPictureDaySuccess(with: response)
             }.catch { [weak self] error in
                 let networkError = error as? NetworkError ?? .init(type: .unknown)
                 self?.handleFetchError(with: networkError)
             }
     }
     
-    private func handleFetchSuccess(with response: Home.Response) {
+    private func handleFetchPictureDaySuccess(with response: Home.Response) {
         let data = HomeData(
             title: response.title,
             date: response.date,
