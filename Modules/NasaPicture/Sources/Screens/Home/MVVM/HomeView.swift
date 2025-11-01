@@ -1,6 +1,12 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject var viewModel: HomeViewModel
+    
+    init(viewModel: HomeViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     private let horizontalPadding: CGFloat = 24
     
     // Quantidade de placeholders
@@ -10,10 +16,9 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                
                 // MARK: - Header
                 HStack(alignment: .center) {
-                    Text("Nasa")
+                    Text(viewModel.model.title)
                         .font(.largeTitle.bold())
                     
                     Spacer()
@@ -21,8 +26,9 @@ struct HomeView: View {
                     Button(action: {
                         print("Botão pressionado")
                     }) {
-                        Text("31/10/2025")
+                        Text(viewModel.model.date)
                             .font(.callout.bold())
+                            .padding(.top, 4)
                     }
                 }
                 .padding(.top, 16)
@@ -101,9 +107,14 @@ struct HomeView: View {
         }
         .background(Color(.systemBackground))
         .ignoresSafeArea(edges: .bottom)
+        .onAppear {
+            Task {
+                await viewModel.fetch()
+            }
+        }
     }
 }
 
 #Preview {
-    HomeView()
+//    HomeView()
 }
