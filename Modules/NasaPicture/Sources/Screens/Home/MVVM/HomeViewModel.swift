@@ -15,28 +15,27 @@ final class HomeViewModel: ObservableObject {
     
     func build() {
         let currentDate = model.header.date
-        let startDate = getStartDate(from: currentDate)
+        let startDate = getDateAgo(from: currentDate, days: 10)
         lastRequestedDate = currentDate
         model.state = .loading
         dataProvider.fetchPictures(startDate: startDate, endDate: currentDate)
             .done { [weak self] response in
-                self?.handleFetchPictureDaySuccess(with: response, date: currentDate)
+                self?.handleFetchPicturesSuccess(with: response, date: currentDate)
             }.catch { [weak self] error in
                 let networkError = error as? NetworkError ?? .init(type: .unknown)
                 self?.handleFetchError(with: networkError, date: currentDate)
             }
     }
     
-    private func getStartDate(from currentDate: String) -> String {
-        if let tenDaysAgo = Calendar.current.date(byAdding: .day, value: -10, to: currentDate.toDate()) {
-            let startDate = tenDaysAgo.toString()
-            return startDate
+    private func getDateAgo(from currentDate: String, days: Int) -> String {
+        if let newDate = Calendar.current.date(byAdding: .day, value: -days, to: currentDate.toDate()) {
+            return newDate.toString()
         } else {
             return currentDate
         }
     }
     
-    private func handleFetchPictureDaySuccess(with responses: [Home.Response], date: String) {
+    private func handleFetchPicturesSuccess(with responses: [Home.Response], date: String) {
         guard lastRequestedDate == date else { return }
 
         guard let mainResponse = responses.first(where: { $0.date == date }) else {
@@ -61,6 +60,7 @@ final class HomeViewModel: ObservableObject {
                 headerTitle: "Outras fotos",
                 pictures: otherResponses.map {
                     HomeData.PictureList.Picture(
+                        date: $0.date,
                         title: $0.title,
                         description: $0.explanation,
                         imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!
@@ -93,6 +93,39 @@ final class HomeViewModel: ObservableObject {
         if model.header.date != date {
             model.header.date = date
             build()
+        }
+    }
+    
+    func loadMore(date: String) {
+        let currentDate = getDateAgo(from: date, days: 1)
+        let startDate = getDateAgo(from: currentDate, days: 9)
+        lastRequestedDate = currentDate
+        dataProvider.fetchPictures(startDate: startDate, endDate: currentDate)
+            .done { [weak self] response in
+                self?.handleFetchMorePicturesSuccess(with: response, date: currentDate)
+            }
+    }
+    
+    private func handleFetchMorePicturesSuccess(with responses: [Home.Response], date: String) {
+        guard lastRequestedDate == date else { return }
+        
+        let responsesSorted = responses
+            .sorted { lhs, rhs in
+                return lhs.date.toDate() > rhs.date.toDate()
+            }
+
+        let newPictures = responsesSorted.map {
+            HomeData.PictureList.Picture(
+                date: $0.date,
+                title: $0.title,
+                description: $0.explanation,
+                imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!
+            )
+        }
+
+        if case .success(var currentData) = model.state {
+            currentData.gridPicture.pictures.append(contentsOf: newPictures)
+            model.state = .success(currentData)
         }
     }
 }

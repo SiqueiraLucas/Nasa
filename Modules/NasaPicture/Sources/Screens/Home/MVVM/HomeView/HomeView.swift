@@ -34,7 +34,13 @@ struct HomeView: View {
                                     HomeFavoritesSectionView(data: favorites, horizontalPadding: horizontalPadding)
                                 }
                                 
-                                HomeGridSectionView(data: data.gridPicture, horizontalPadding: horizontalPadding)
+                                HomeGridSectionView(
+                                    data: data.gridPicture,
+                                    horizontalPadding: horizontalPadding,
+                                    onLoadMore: { date in
+                                        viewModel.loadMore(date: date)
+                                    }
+                                )
                             }
                         }
                     }

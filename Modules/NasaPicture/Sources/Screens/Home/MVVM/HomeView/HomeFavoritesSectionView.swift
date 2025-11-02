@@ -43,6 +43,7 @@ struct HomeFavoritesSectionView: View {
             headerTitle: "Outras fotos",
             pictures: (1...6).map { _ in
                 HomeData.PictureList.Picture(
+                    date: "2025-01-01",
                     title: "Title",
                     description: "Description",
                     imageUrl: URL(string: "https://picsum.photos/seed/\(UUID().uuidString)/400/300")!
