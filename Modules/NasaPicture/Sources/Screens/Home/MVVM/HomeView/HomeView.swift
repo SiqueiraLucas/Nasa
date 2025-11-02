@@ -89,6 +89,11 @@ struct HomeView_Previews: PreviewProvider {
         func fetchPictureDay(date: String) -> Promise<Home.Response> {
             return Promise.value(mockResponse)
         }
+        
+        func fetchFavorites() -> [Home.Response] { return [] }
+        func saveFavorite(response: Home.Response) {}
+        func deleteFavorite(date: String) {}
+        func fetchFavorites() {}
     }
     
     static var previews: some View {

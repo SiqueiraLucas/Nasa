@@ -25,6 +25,8 @@ final class HomeViewModel: ObservableObject {
                 let networkError = error as? NetworkError ?? .init(type: .unknown)
                 self?.handleFetchError(with: networkError, date: currentDate)
             }
+        
+        dataProvider.fetchFavorites()
     }
     
     private func getDateAgo(from currentDate: String, days: Int) -> String {
