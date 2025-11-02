@@ -3,7 +3,6 @@
     <entity name="Favorite" representedClassName="Favorite" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="explanation" optional="YES" attributeType="String"/>
-        <attribute name="imageHDUrl" optional="YES" attributeType="URI"/>
         <attribute name="imageUrl" optional="YES" attributeType="URI"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>

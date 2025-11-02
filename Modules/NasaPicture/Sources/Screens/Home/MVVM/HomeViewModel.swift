@@ -53,19 +53,25 @@ final class HomeViewModel: ObservableObject {
         let data = HomeData(
             mainPicture: HomeData.MainPicture(
                 headerTitle: "Foto do dia",
-                title: mainResponse.title,
-                description: mainResponse.explanation,
-                imageUrl: mainResponse.imageURL ?? URL(string: "https://picsum.photos/300/200")!
+                picture: HomeData.Picture(
+                    date: mainResponse.date,
+                    title: mainResponse.title,
+                    description: mainResponse.explanation,
+                    imageUrl: mainResponse.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
+                    favorite: true
+                )
             ),
             favorites: nil,
             gridPicture: HomeData.PictureList(
                 headerTitle: "Outras fotos",
+                buttonTitle: nil,
                 pictures: otherResponses.map {
-                    HomeData.PictureList.Picture(
+                    HomeData.Picture(
                         date: $0.date,
                         title: $0.title,
                         description: $0.explanation,
-                        imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!
+                        imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
+                        favorite: false
                     )
                 }
             )
@@ -117,11 +123,12 @@ final class HomeViewModel: ObservableObject {
             }
 
         let newPictures = responsesSorted.map {
-            HomeData.PictureList.Picture(
+            HomeData.Picture(
                 date: $0.date,
                 title: $0.title,
                 description: $0.explanation,
-                imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!
+                imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
+                favorite: false
             )
         }
 
@@ -129,5 +136,14 @@ final class HomeViewModel: ObservableObject {
             currentData.gridPicture.pictures.append(contentsOf: newPictures)
             model.state = .success(currentData)
         }
+    }
+    
+    func didTouchFavoriteButton(picture: HomeData.Picture) {
+        dataProvider.saveFavorite(response: Home.Response(
+            title: picture.title,
+            explanation: picture.description,
+            date: picture.date,
+            imageURL: picture.imageUrl
+        ))
     }
 }

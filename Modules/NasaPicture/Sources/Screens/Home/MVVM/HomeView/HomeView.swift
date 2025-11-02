@@ -28,10 +28,22 @@ struct HomeView: View {
                     case .success(let data):
                         ScrollView {
                             VStack(alignment: .leading, spacing: 16) {
-                                HomeMainPictureView(data: data.mainPicture, horizontalPadding: horizontalPadding)
+                                HomeMainPictureView(
+                                    data: data.mainPicture,
+                                    horizontalPadding: horizontalPadding,
+                                    touchFavoriteButton: { picture in
+                                        viewModel.didTouchFavoriteButton(picture: picture)
+                                    }
+                                )
                                 
                                 if let favorites = data.favorites {
-                                    HomeFavoritesSectionView(data: favorites, horizontalPadding: horizontalPadding)
+                                    HomeFavoritesSectionView(
+                                        data: favorites,
+                                        horizontalPadding: horizontalPadding,
+                                        touchFavoriteButton: { picture in
+                                            viewModel.didTouchFavoriteButton(picture: picture)
+                                        }
+                                    )
                                 }
                                 
                                 HomeGridSectionView(
@@ -39,6 +51,9 @@ struct HomeView: View {
                                     horizontalPadding: horizontalPadding,
                                     onLoadMore: { date in
                                         viewModel.loadMore(date: date)
+                                    },
+                                    touchFavoriteButton: { picture in
+                                        viewModel.didTouchFavoriteButton(picture: picture)
                                     }
                                 )
                             }
@@ -78,7 +93,6 @@ struct HomeView_Previews: PreviewProvider {
             title: "Mock Title",
             explanation: "Mocke Explanation",
             date: "Mock Date",
-            imageHDUrl: URL(string: "https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68")!,
             imageURL: URL(string: "https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68")!
         )
         

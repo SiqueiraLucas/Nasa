@@ -28,36 +28,6 @@ final class HomeDataProvider: HomeDataProviderProtocol {
         ))
     }
     
-    struct Response: Decodable {
-        var title: String
-        var explanation: String
-        var date: String
-        var imageHDUrl: URL?
-        var imageURL: URL?
-
-        enum CodingKeys: String, CodingKey {
-            case title
-            case explanation
-            case date
-            case imageHDUrl = "hdurl"
-            case imageURL = "url"
-        }
-
-        init(
-            title: String,
-            explanation: String,
-            date: String,
-            imageHDUrl: URL?,
-            imageURL: URL?
-        ) {
-            self.title = title
-            self.explanation = explanation
-            self.date = date
-            self.imageHDUrl = imageHDUrl
-            self.imageURL = imageURL
-        }
-    }
-    
     func fetchFavorites() -> [Home.Response] {
         do {
             let favorites = try dataClient.fetch(entityName: "Favorite", predicate: nil, sortDescriptors: nil)
@@ -69,14 +39,12 @@ final class HomeDataProvider: HomeDataProviderProtocol {
                     let date = favorite.value(forKey: "date") as? String
                 else { return nil }
 
-                let imageHDUrl = favorite.value(forKey: "imageHDUrl") as? URL
-                let imageURL = favorite.value(forKey: "imageURL") as? URL
+                let imageURL = favorite.value(forKey: "imageUrl") as? URL
 
                 return Home.Response(
                     title: title,
                     explanation: explanation,
                     date: date,
-                    imageHDUrl: imageHDUrl,
                     imageURL: imageURL
                 )
             }
@@ -102,8 +70,7 @@ final class HomeDataProvider: HomeDataProviderProtocol {
                 object.setValue(response.title, forKey: "title")
                 object.setValue(response.explanation, forKey: "explanation")
                 object.setValue(response.date, forKey: "date")
-                object.setValue(response.imageHDUrl, forKey: "imageHDUrl")
-                object.setValue(response.imageURL, forKey: "imageURL")
+                object.setValue(response.imageURL, forKey: "imageUrl")
             }
 
         } catch {
@@ -117,12 +84,10 @@ final class HomeDataProvider: HomeDataProviderProtocol {
             let results = try dataClient.fetch(entityName: "Favorite", predicate: predicate, sortDescriptors: nil)
 
             guard let favorite = results.first else {
-                print("⚠️ Nenhum favorito encontrado com a data \(date).")
                 return
             }
 
             try dataClient.delete(object: favorite)
-            print("🗑️ Favorito removido: \(date)")
 
         } catch {
             print("❌ Erro ao deletar favorito: \(error)")

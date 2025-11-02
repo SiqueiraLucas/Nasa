@@ -4,6 +4,7 @@ struct HomeGridSectionView: View {
     let data: HomeData.PictureList
     let horizontalPadding: CGFloat
     var onLoadMore: (_ date: String) -> Void
+    var touchFavoriteButton: (_ picture: HomeData.Picture) -> Void
     
     private let imageHeight: CGFloat = 160
     
@@ -32,10 +33,10 @@ struct HomeGridSectionView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         
                         Button(action: {
-                            print("Favoritar: \(item.title)")
+                            touchFavoriteButton(item)
                         }) {
-                            Image(systemName: "heart")
-                                .foregroundColor(.white)
+                            Image(systemName: item.favorite ? "heart.fill" : "heart")
+                                .foregroundColor(item.favorite ? .red : .white)
                                 .padding(6)
                                 .background(Color.black.opacity(0.3))
                                 .clipShape(Circle())
@@ -75,17 +76,23 @@ struct HomeGridSectionView: View {
     HomeGridSectionView(
         data: HomeData.PictureList(
             headerTitle: "Outras fotos",
+            buttonTitle: nil,
             pictures: (1...6).map { _ in
-                HomeData.PictureList.Picture(
+                HomeData.Picture(
                     date: "01/01/2025",
                     title: "Title",
                     description: "Description",
-                    imageUrl: URL(string: "https://picsum.photos/seed/\(UUID().uuidString)/400/300")!
+                    imageUrl: URL(string: "https://picsum.photos/seed/\(UUID().uuidString)/400/300")!,
+                    favorite: false
                 )
             }
         ),
-        horizontalPadding: 24, onLoadMore: { date in
-            print("date")
+        horizontalPadding: 24,
+        onLoadMore: { date in
+            print(date)
+        },
+        touchFavoriteButton: { picture in
+            print(picture)
         }
     )
 }

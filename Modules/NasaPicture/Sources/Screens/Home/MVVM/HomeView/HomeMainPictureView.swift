@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeMainPictureView: View {
     let data: HomeData.MainPicture
     let horizontalPadding: CGFloat
+    var touchFavoriteButton: (_ picture: HomeData.Picture) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -12,7 +13,7 @@ struct HomeMainPictureView: View {
                 .padding(.top, 8)
             
             ZStack {
-                URLImage(url: data.imageUrl, cornerRadius: 12)
+                URLImage(url: data.picture.imageUrl, cornerRadius: 12)
                     .aspectRatio(16/9, contentMode: .fit)
                     .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -21,12 +22,12 @@ struct HomeMainPictureView: View {
                     Spacer()
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(data.title)
+                        Text(data.picture.title)
                             .font(.footnote.bold())
                             .foregroundColor(.white)
                             .lineLimit(2)
                         
-                        Text(data.description)
+                        Text(data.picture.description)
                             .font(.caption)
                             .foregroundColor(.white.opacity(0.9))
                             .lineLimit(2)
@@ -39,13 +40,14 @@ struct HomeMainPictureView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            print("Favoritar: \(data.title)")
+                            touchFavoriteButton(data.picture)
                         }) {
-                            Image(systemName: "heart")
-                                .foregroundColor(.white)
-                                .padding(8)
-                                .background(Color.black.opacity(0.6))
+                            Image(systemName: data.picture.favorite ? "heart.fill" : "heart")
+                                .foregroundColor(data.picture.favorite ? .red : .white)
+                                .padding(6)
+                                .background(Color.black.opacity(0.3))
                                 .clipShape(Circle())
+                                .padding(6)
                         }
                         .padding(8)
                     }
@@ -61,9 +63,17 @@ struct HomeMainPictureView: View {
     HomeMainPictureView(
         data: HomeData.MainPicture(
             headerTitle: "Header title",
-            title: "Title",
-            description: "Description",
-            imageUrl: URL(string: "https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68")!),
-        horizontalPadding: 24
+            picture: HomeData.Picture(
+                date: "01/01/2025",
+                title: "Title",
+                description: "Description",
+                imageUrl: URL(string: "https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68")!,
+                favorite: false
+            )
+        ),
+        horizontalPadding: 24,
+        touchFavoriteButton: { picture in
+            print(picture)
+        }
     )
 }
