@@ -1,7 +1,7 @@
 import Foundation
 
 struct HomeModel: BaseModel {
-    var header = HeaderData(date: Date().toString())
+    var header = HeaderData(date: "2025-10-01")
     let datePicker = DatePickerData()
     
     struct HeaderData {
@@ -10,8 +10,8 @@ struct HomeModel: BaseModel {
     }
     
     struct DatePickerData {
-        let minimumDate = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
-        let maximumDate = Date()
+        let minimumDate = "2024-10-01".toDate()
+        let maximumDate = "2025-10-01".toDate()
     }
     
     typealias DataType = HomeData
