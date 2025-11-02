@@ -8,12 +8,9 @@ extension Home {
         
         let date: String
         
-        var queryParams: [String : Any] {
-            [
-                "api_key": "key",
-                "date": date
-            ]
-        }
+        var queryParams: [String : Any] {[
+            "date": date
+        ]}
     }
     
     struct PicturesRequest: HTTPRequest {
@@ -23,12 +20,10 @@ extension Home {
         let startDate: String
         let endDate: String
         
-        var queryParams: [String : Any] {
-            [
-                "api_key": "key",
-                "start_date": startDate,
-                "end_date": endDate
-            ]
-        }
+        var queryParams: [String : Any] {[
+            "api_key": "key",
+            "start_date": startDate,
+            "end_date": endDate
+        ]}
     }
 }

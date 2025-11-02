@@ -4,7 +4,7 @@ import PromiseKit
 public protocol HTTPClientProtocol: AnyObject {
     var baseURL: URL { get }
     var defaultHeaders: [String: String] { get }
-    func setup(logDelegate: HTTPClientLogDelegate)
+    var defaultQuerys: [String: Any] { get }
     func send<R>(_ resource: R) -> Promise<R.Value> where R: HTTPRequest
     func upload<R>(_ resource: R, uploadData: UploadData) -> Promise<R.Value> where R: HTTPRequest
     func cancel<R>(_ resource: R) where R: HTTPRequest

@@ -6,7 +6,18 @@ struct HomeModel: BaseModel {
 }
 
 struct HomeData {
-    let title: String
-    let date: String
-    let mainPhotoUrl: URL
+    let header: Header
+    let mainPicture: MainPicture
+    
+    struct Header {
+        let title: String
+        let date: String
+    }
+    
+    struct MainPicture {
+        let headerTitle: String
+        let title: String
+        let description: String
+        let imageUrl: URL
+    }
 }

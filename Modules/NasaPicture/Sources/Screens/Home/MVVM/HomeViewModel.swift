@@ -30,9 +30,16 @@ final class HomeViewModel: HomeViewModelProtocol {
     
     private func handleFetchPictureDaySuccess(with response: Home.Response) {
         let data = HomeData(
-            title: response.title,
-            date: response.date,
-            mainPhotoUrl: response.imageURL
+            header: HomeData.Header(
+                title: "Nasa",
+                date: response.date
+            ),
+            mainPicture: HomeData.MainPicture(
+                headerTitle: "Foto do dia",
+                title: response.title,
+                description: response.explanation,
+                imageUrl: response.imageURL
+            )
         )
         
         model.state = .success(data)

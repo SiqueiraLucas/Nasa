@@ -1,13 +1,12 @@
 import SwiftUI
 
 struct HomeHeaderView: View {
-    let title: String
-    let date: String
+    let data: HomeData.Header
     let horizontalPadding: CGFloat
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(title)
+            Text(data.title)
                 .font(.largeTitle.bold())
             
             Spacer()
@@ -15,10 +14,16 @@ struct HomeHeaderView: View {
             Button(action: {
                 print("Botão pressionado")
             }) {
-                Text(date)
-                    .font(.callout.bold())
-                    .padding(.top, 4)
+                HStack(spacing: 6) {
+                    Text(data.date)
+                        .font(.callout.bold())
+
+                    Image(systemName: "line.3.horizontal.decrease.circle")
+                        .font(.callout)
+                }
+                .padding(.top, 4)
             }
+
         }
         .padding(.top, 16)
         .padding(.horizontal, horizontalPadding)
@@ -27,8 +32,9 @@ struct HomeHeaderView: View {
 
 #Preview {
     HomeHeaderView(
-        title: "Title",
-        date: "01/01/2025",
+        data: HomeData.Header(
+            title: "Title",
+            date: "01/01/2025"),
         horizontalPadding: 24
     )
 }

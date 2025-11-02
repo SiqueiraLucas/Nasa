@@ -19,9 +19,9 @@ struct HomeView: View {
             case .success(let data):
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        HomeHeaderView(title: data.title, date: data.date, horizontalPadding: 24)
+                        HomeHeaderView(data: data.header, horizontalPadding: 24)
                         Divider().background(Color.gray).padding(.horizontal, 24)
-                        HomeMainPictureView(horizontalPadding: 24)
+                        HomeMainPictureView(data: data.mainPicture, horizontalPadding: 24)
                         HomeFavoritesSectionView(horizontalPadding: 24)
                         HomeGridSectionView(horizontalPadding: 24)
                     }

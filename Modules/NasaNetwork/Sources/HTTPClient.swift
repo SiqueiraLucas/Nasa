@@ -6,15 +6,16 @@ import NasaNetworkInterface
 public final class HTTPClient: HTTPClientProtocol {
     public var baseURL: URL
     public var defaultHeaders: [String: String]
+    public var defaultQuerys: [String : Any]
     private let timeoutInterval: TimeInterval?
     private let session: URLSession
     private var trackRequestError: Bool
     private weak var delegate: ErrorResponseDelegate?
-    private weak var logDelegate: HTTPClientLogDelegate?
 
     public init(requestInfo: RequestInfo, sessionDelegate: SessionDelegate? = nil, trackRequestError: Bool = false) {
         baseURL = requestInfo.baseURL
         defaultHeaders = requestInfo.defaultHeaders
+        defaultQuerys = requestInfo.defaultQuerys
         timeoutInterval = requestInfo.timeoutInterval
         session = URLSession(configuration: .default, delegate: sessionDelegate, delegateQueue: nil)
         self.trackRequestError = trackRequestError
@@ -22,11 +23,6 @@ public final class HTTPClient: HTTPClientProtocol {
 
     public func set(_ delegate: ErrorResponseDelegate) {
         self.delegate = delegate
-    }
-
-    public func setup(logDelegate: HTTPClientLogDelegate) {
-        self.logDelegate = logDelegate
-        self.logDelegate?.logDefaultHeaders(defaultHeaders)
     }
 
     public func send<R>(_ resource: R) -> Promise<R.Value> where R: HTTPRequest {
@@ -67,7 +63,12 @@ public final class HTTPClient: HTTPClientProtocol {
         urlRequest.httpMethod = resource.method.rawValue
         urlRequest.allHTTPHeaderFields = defaultHeaders.merging(resource.headers) { _, new -> String in new }
         urlRequest.httpBody = jsonBody(from: resource)
-        urlRequest.url = url(urlRequest.url, withResourceQueryParams: resource.queryParams)
+        var mergedQueryParams = resource.queryParams
+        if !defaultQuerys.isEmpty {
+            mergedQueryParams.merge(defaultQuerys) { _, new in new }
+        }
+        
+        urlRequest.url = url(urlRequest.url, withResourceQueryParams: mergedQueryParams)
         return urlRequest
     }
 
@@ -191,17 +192,14 @@ public final class HTTPClient: HTTPClientProtocol {
 
     public func add(defaultHeader header: String, value: String) {
         defaultHeaders[header] = value
-        logDelegate?.logDefaultHeaders(defaultHeaders)
     }
 
     public func remove(defaultHeader header: String) {
         defaultHeaders.removeValue(forKey: header)
-        logDelegate?.logDefaultHeaders(defaultHeaders)
     }
 
     public func set(defaultHeaders: [String: String]) {
         self.defaultHeaders = defaultHeaders
-        logDelegate?.logDefaultHeaders(defaultHeaders)
     }
 }
 
@@ -215,10 +213,12 @@ public struct RequestInfo {
     let baseURL: URL
     let timeoutInterval: TimeInterval?
     let defaultHeaders: [String: String]
+    let defaultQuerys: [String : Any]
 
-    public init(baseURL: URL, timeoutInterval: TimeInterval? = nil, defaultHeaders: [String: String]) {
+    public init(baseURL: URL, timeoutInterval: TimeInterval? = nil, defaultHeaders: [String: String] = [:], defaultQuerys: [String : Any] = [:]) {
         self.baseURL = baseURL
         self.timeoutInterval = timeoutInterval
         self.defaultHeaders = defaultHeaders
+        self.defaultQuerys = defaultQuerys
     }
 }
