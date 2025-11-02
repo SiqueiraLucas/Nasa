@@ -1,12 +1,14 @@
 import SwiftUI
 
 struct HomeGridSectionView: View {
+    let data: HomeData.PictureList
     let horizontalPadding: CGFloat
-    private let otherCount = 12
+    
+    private let imageHeight: CGFloat = 160
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Outras fotos")
+            Text(data.headerTitle)
                 .font(.title2.weight(.semibold))
                 .padding(.horizontal, horizontalPadding)
                 .padding(.top, 8)
@@ -18,10 +20,14 @@ struct HomeGridSectionView: View {
                 ],
                 spacing: 12
             ) {
-                ForEach(0..<otherCount, id: \.self) { _ in
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 160)
+                ForEach(data.pictures, id: \.imageUrl) { item in
+                    let imageWidth = (UIScreen.main.bounds.width - (horizontalPadding * 2) - 12) / 2
+
+                    URLImage(url: item.imageUrl, cornerRadius: 0)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: imageWidth, height: imageHeight)
+                        .clipped()
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
             }
             .padding(.horizontal, horizontalPadding)
@@ -32,6 +38,16 @@ struct HomeGridSectionView: View {
 
 #Preview {
     HomeGridSectionView(
+        data: HomeData.PictureList(
+            headerTitle: "Outras fotos",
+            pictures: (1...6).map { _ in
+                HomeData.PictureList.Picture(
+                    title: "Title",
+                    description: "Description",
+                    imageUrl: URL(string: "https://picsum.photos/seed/\(UUID().uuidString)/400/300")!
+                )
+            }
+        ),
         horizontalPadding: 24
     )
 }

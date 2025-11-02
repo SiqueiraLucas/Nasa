@@ -20,11 +20,24 @@ struct HomeModel: BaseModel {
 
 struct HomeData {
     let mainPicture: MainPicture
+    let favorites: PictureList?
+    let gridPicture: PictureList
     
     struct MainPicture {
         let headerTitle: String
         let title: String
         let description: String
         let imageUrl: URL
+    }
+    
+    struct PictureList {
+        let headerTitle: String
+        let pictures: [Picture]
+        
+        struct Picture {
+            let title: String
+            let description: String
+            let imageUrl: URL
+        }
     }
 }

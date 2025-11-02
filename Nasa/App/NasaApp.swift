@@ -14,7 +14,7 @@ struct NasaApp: App {
         // Setup HTTP Client
         let baseURL = AppConfig.baseURL
         let defaultQuerys: [String: Any] = ["api_key": AppConfig.apiKey]
-        let requestInfo = RequestInfo(baseURL: baseURL, defaultQuerys: defaultQuerys)
+        let requestInfo = RequestInfo(baseURL: baseURL, timeoutInterval: 10, defaultQuerys: defaultQuerys)
         httpClient = HTTPClient(requestInfo: requestInfo)
 
         // Setup Feature

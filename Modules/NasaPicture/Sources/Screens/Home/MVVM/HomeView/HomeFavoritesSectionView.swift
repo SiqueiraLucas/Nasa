@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HomeFavoritesSectionView: View {
+    let data: HomeData.PictureList
     let horizontalPadding: CGFloat
     private let favoriteCount = 5
     
@@ -38,6 +39,16 @@ struct HomeFavoritesSectionView: View {
 
 #Preview {
     HomeFavoritesSectionView(
+        data: HomeData.PictureList(
+            headerTitle: "Outras fotos",
+            pictures: (1...6).map { _ in
+                HomeData.PictureList.Picture(
+                    title: "Title",
+                    description: "Description",
+                    imageUrl: URL(string: "https://picsum.photos/seed/\(UUID().uuidString)/400/300")!
+                )
+            }
+        ),
         horizontalPadding: 24
     )
 }

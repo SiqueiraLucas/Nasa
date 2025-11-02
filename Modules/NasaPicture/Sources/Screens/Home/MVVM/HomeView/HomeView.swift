@@ -29,8 +29,12 @@ struct HomeView: View {
                         ScrollView {
                             VStack(alignment: .leading, spacing: 16) {
                                 HomeMainPictureView(data: data.mainPicture, horizontalPadding: horizontalPadding)
-                                HomeFavoritesSectionView(horizontalPadding: horizontalPadding)
-                                HomeGridSectionView(horizontalPadding: horizontalPadding)
+                                
+                                if let favorites = data.favorites {
+                                    HomeFavoritesSectionView(data: favorites, horizontalPadding: horizontalPadding)
+                                }
+                                
+                                HomeGridSectionView(data: data.gridPicture, horizontalPadding: horizontalPadding)
                             }
                         }
                     }
