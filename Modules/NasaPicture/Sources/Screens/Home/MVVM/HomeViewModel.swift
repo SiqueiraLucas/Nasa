@@ -4,27 +4,33 @@ import Combine
 import NasaNetworkInterface
 
 final class HomeViewModel: ObservableObject {
-    @Published var model: HomeModel
+    @Published var model = HomeModel()
     
     private let dataProvider: HomeDataProviderProtocol
+    private var lastRequestedDate: String?
     
-    init(dataProvider: HomeDataProviderProtocol, date: String) {
+    init(dataProvider: HomeDataProviderProtocol) {
         self.dataProvider = dataProvider
-        self.model = HomeModel(date: date)
     }
     
     func build() {
+        let currentDate = model.header.date
+        lastRequestedDate = currentDate
         model.state = .loading
-        dataProvider.fetchPictureDay(date: model.date)
+        dataProvider.fetchPictureDay(date: currentDate)
             .done { [weak self] response in
-                self?.handleFetchPictureDaySuccess(with: response)
+                self?.handleFetchPictureDaySuccess(with: response, date: currentDate)
             }.catch { [weak self] error in
                 let networkError = error as? NetworkError ?? .init(type: .unknown)
-                self?.handleFetchError(with: networkError)
+                self?.handleFetchError(with: networkError, date: currentDate)
             }
     }
     
-    private func handleFetchPictureDaySuccess(with response: Home.Response) {
+    private func handleFetchPictureDaySuccess(with response: Home.Response, date: String) {
+        guard lastRequestedDate == date else {
+            return
+        }
+        
         let data = HomeData(
             mainPicture: HomeData.MainPicture(
                 headerTitle: "Foto do dia",
@@ -37,7 +43,11 @@ final class HomeViewModel: ObservableObject {
         model.state = .success(data)
     }
     
-    private func handleFetchError(with error: NetworkError) {
+    private func handleFetchError(with error: NetworkError, date: String) {
+        guard lastRequestedDate == date else {
+            return
+        }
+        
         model.state = .error(data: ErrorData(
             title: "Erro inesperado",
             description: error.localizedDescription,
@@ -48,8 +58,8 @@ final class HomeViewModel: ObservableObject {
     }
     
     func newDateSelected(_ date: String) {
-        if model.date != date {
-            model.date = date
+        if model.header.date != date {
+            model.header.date = date
             build()
         }
     }

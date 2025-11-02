@@ -6,7 +6,6 @@ struct HomeMainPictureView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Título da seção
             Text(data.headerTitle)
                 .font(.title.weight(.semibold))
                 .padding(.horizontal, horizontalPadding)

@@ -1,12 +1,17 @@
 import Foundation
 
 struct HomeModel: BaseModel {
-    let title = "Nasa"
-    var date: String
+    var header = HeaderData(date: Date().toString())
+    let datePicker = DatePickerData()
     
-    struct Header {
-        let title: String
-        let date: String
+    struct HeaderData {
+        let title = "Nasa"
+        var date: String
+    }
+    
+    struct DatePickerData {
+        let minimumDate = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
+        let maximumDate = Date()
     }
     
     typealias DataType = HomeData

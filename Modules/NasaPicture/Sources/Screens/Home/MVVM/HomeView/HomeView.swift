@@ -13,7 +13,7 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 16) {
-                HomeHeaderView(title: viewModel.model.title, date: viewModel.model.date, horizontalPadding: horizontalPadding) {
+                HomeHeaderView(header: viewModel.model.header, horizontalPadding: horizontalPadding) {
                     showDatePicker = true
                 }
                 
@@ -39,9 +39,9 @@ struct HomeView: View {
             
             if showDatePicker {
                 DatePickerDialog(
-                    minimumDate: Calendar.current.date(byAdding: .year, value: -1, to: Date())!,
-                    maximumDate: Date(),
-                    currentDate: viewModel.model.date.toDate(),
+                    minimumDate: viewModel.model.datePicker.minimumDate,
+                    maximumDate: viewModel.model.datePicker.maximumDate,
+                    currentDate: viewModel.model.header.date.toDate(),
                     isPresented: $showDatePicker
                 ) { newDate in
                     viewModel.newDateSelected(newDate.toString())
@@ -83,7 +83,7 @@ struct HomeView_Previews: PreviewProvider {
     
     static var previews: some View {
         let dataProvider = HomeDataProviderPreview()
-        var viewModel = HomeViewModel(dataProvider: dataProvider, date: "01/01/2025")
+        var viewModel = HomeViewModel(dataProvider: dataProvider)
         HomeView(viewModel: viewModel)
     }
 }
