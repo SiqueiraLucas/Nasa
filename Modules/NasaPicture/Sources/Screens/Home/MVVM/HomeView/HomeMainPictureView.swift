@@ -11,25 +11,46 @@ struct HomeMainPictureView: View {
                 .padding(.horizontal, horizontalPadding)
                 .padding(.top, 8)
             
-            ZStack(alignment: .bottomLeading) {
+            ZStack {
                 URLImage(url: data.imageUrl, cornerRadius: 12)
                     .aspectRatio(16/9, contentMode: .fit)
                     .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(data.title)
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .lineLimit(2)
+                VStack {
+                    Spacer()
                     
-                    Text(data.description)
-                        .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.9))
-                        .lineLimit(2)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(data.title)
+                            .font(.footnote.bold())
+                            .foregroundColor(.white)
+                            .lineLimit(2)
+                        
+                        Text(data.description)
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.9))
+                            .lineLimit(2)
+                    }
+                    .padding(16)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
-                .frame(height: 100, alignment: .bottom)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
+                
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            print("Favoritar: \(data.title)")
+                        }) {
+                            Image(systemName: "heart")
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(Color.black.opacity(0.6))
+                                .clipShape(Circle())
+                        }
+                        .padding(8)
+                    }
+                    Spacer()
+                }
             }
             .padding(.horizontal, horizontalPadding)
         }

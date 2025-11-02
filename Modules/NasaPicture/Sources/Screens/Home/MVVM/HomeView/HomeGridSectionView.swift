@@ -24,26 +24,44 @@ struct HomeGridSectionView: View {
                 ForEach(Array(data.pictures.enumerated()), id: \.offset) { index, item in
                     let imageWidth = (UIScreen.main.bounds.width - (horizontalPadding * 2) - 12) / 2
                     
-                    ZStack(alignment: .bottomLeading) {
+                    ZStack(alignment: .topTrailing) {
                         URLImage(url: item.imageUrl, cornerRadius: 0)
                             .aspectRatio(contentMode: .fill)
                             .frame(width: imageWidth, height: imageHeight)
                             .clipped()
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         
-                        Text(item.date)
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(6)
-                            .background(Color.black.opacity(0.6))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .padding(6)
+                        Button(action: {
+                            print("Favoritar: \(item.title)")
+                        }) {
+                            Image(systemName: "heart")
+                                .foregroundColor(.white)
+                                .padding(6)
+                                .background(Color.black.opacity(0.3))
+                                .clipShape(Circle())
+                                .padding(6)
+                        }
+                        
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Text(item.date)
+                                    .font(.caption2)
+                                    .foregroundColor(.white)
+                                    .padding(6)
+                                    .background(Color.black.opacity(0.6))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .padding(6)
+                                Spacer()
+                            }
+                        }
                     }
                     .onAppear {
                         if index == data.pictures.count - 1 {
                             onLoadMore(item.date)
                         }
                     }
+
                 }
             }
             .padding(.horizontal, horizontalPadding)
