@@ -1,15 +1,15 @@
 import SwiftUI
 
 public struct LoadingView: View {
+    public init() {}
+    
     public var body: some View {
-        VStack() {
-            Spacer()
-            
-            ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            Spacer()
+        ZStack {
+            Color.clear
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
         }
-        .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

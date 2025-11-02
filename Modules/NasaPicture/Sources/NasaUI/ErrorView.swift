@@ -45,7 +45,7 @@ public struct ErrorView: View {
             Spacer()
         }
         .padding(.horizontal, horizontalPadding)
-        .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

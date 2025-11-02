@@ -3,23 +3,19 @@ import SwiftUI
 import Combine
 import NasaNetworkInterface
 
-protocol HomeViewModelProtocol where Self: ObservableObject {
-    var model: HomeModel { get set }
-    func build()
-}
-
-final class HomeViewModel: HomeViewModelProtocol {
-    @Published var model = HomeModel()
+final class HomeViewModel: ObservableObject {
+    @Published var model: HomeModel
     
     private let dataProvider: HomeDataProviderProtocol
     
-    init(dataProvider: HomeDataProviderProtocol) {
+    init(dataProvider: HomeDataProviderProtocol, date: String) {
         self.dataProvider = dataProvider
+        self.model = HomeModel(date: date)
     }
     
     func build() {
         model.state = .loading
-        dataProvider.fetchPictureDay(date: "2025-10-01")
+        dataProvider.fetchPictureDay(date: model.date)
             .done { [weak self] response in
                 self?.handleFetchPictureDaySuccess(with: response)
             }.catch { [weak self] error in
@@ -30,10 +26,6 @@ final class HomeViewModel: HomeViewModelProtocol {
     
     private func handleFetchPictureDaySuccess(with response: Home.Response) {
         let data = HomeData(
-            header: HomeData.Header(
-                title: "Nasa",
-                date: response.date
-            ),
             mainPicture: HomeData.MainPicture(
                 headerTitle: "Foto do dia",
                 title: response.title,
@@ -53,5 +45,12 @@ final class HomeViewModel: HomeViewModelProtocol {
             buttonAction: { [weak self] in
                 self?.build()
             }))
+    }
+    
+    func newDateSelected(_ date: String) {
+        if model.date != date {
+            model.date = date
+            build()
+        }
     }
 }

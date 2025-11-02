@@ -1,18 +1,20 @@
 import Foundation
 
 struct HomeModel: BaseModel {
-    typealias DataType = HomeData
-    var state: ModelState<HomeData> = .loading
-}
-
-struct HomeData {
-    let header: Header
-    let mainPicture: MainPicture
+    let title = "Nasa"
+    var date: String
     
     struct Header {
         let title: String
         let date: String
     }
+    
+    typealias DataType = HomeData
+    var state: ModelState<HomeData> = .loading
+}
+
+struct HomeData {
+    let mainPicture: MainPicture
     
     struct MainPicture {
         let headerTitle: String
