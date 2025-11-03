@@ -39,16 +39,12 @@ struct HomeMainPictureView: View {
                 VStack {
                     HStack {
                         Spacer()
-                        Button(action: {
-                            touchFavoriteButton(data.picture)
-                        }) {
-                            Image(systemName: data.picture.favorite ? "heart.fill" : "heart")
-                                .foregroundColor(data.picture.favorite ? .red : .white)
-                                .padding(6)
-                                .background(Color.black.opacity(0.3))
-                                .clipShape(Circle())
-                                .padding(6)
-                        }
+                        FavoriteButtonView(
+                            favorite: data.picture.favorite,
+                            action: {
+                                touchFavoriteButton(data.picture)
+                            }
+                        )
                         .padding(8)
                     }
                     Spacer()

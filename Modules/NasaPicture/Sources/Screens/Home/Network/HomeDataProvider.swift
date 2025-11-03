@@ -55,7 +55,6 @@ final class HomeDataProvider: HomeDataProviderProtocol {
             return []
         }
     }
-
     
     func saveFavorite(response: Home.Response) {
         do {

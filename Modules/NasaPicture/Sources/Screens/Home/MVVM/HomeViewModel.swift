@@ -39,6 +39,9 @@ final class HomeViewModel: ObservableObject {
     
     private func handleFetchPicturesSuccess(with responses: [Home.Response], date: String) {
         guard lastRequestedDate == date else { return }
+        
+        let favorites = dataProvider.fetchFavorites()
+        let favoriteDates: Set<String> = Set(favorites.map { $0.date } ?? [])
 
         guard let mainResponse = responses.first(where: { $0.date == date }) else {
             return
@@ -58,10 +61,10 @@ final class HomeViewModel: ObservableObject {
                     title: mainResponse.title,
                     description: mainResponse.explanation,
                     imageUrl: mainResponse.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
-                    favorite: true
+                    favorite: favoriteDates.contains(mainResponse.date)
                 )
             ),
-            favorites: nil,
+            favorites: getFavoritesData(from: favorites),
             gridPicture: HomeData.PictureList(
                 headerTitle: "Outras fotos",
                 buttonTitle: nil,
@@ -71,7 +74,7 @@ final class HomeViewModel: ObservableObject {
                         title: $0.title,
                         description: $0.explanation,
                         imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
-                        favorite: false
+                        favorite: favoriteDates.contains($0.date)
                     )
                 }
             )
@@ -79,7 +82,26 @@ final class HomeViewModel: ObservableObject {
 
         model.state = .success(data)
     }
-
+    
+    private func getFavoritesData(from favorites: [Home.Response]) -> HomeData.PictureList? {
+        if favorites.isEmpty {
+            return nil
+        }
+        
+        return HomeData.PictureList(
+            headerTitle: "Favoritos",
+            buttonTitle: "Ver todos",
+            pictures: favorites.prefix(5).map {
+                HomeData.Picture(
+                    date: $0.date,
+                    title: $0.date,
+                    description: $0.explanation,
+                    imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
+                    favorite: true
+                )
+            }
+        )
+    }
     
     private func handleFetchError(with error: NetworkError, date: String) {
         guard lastRequestedDate == date else {
@@ -117,6 +139,9 @@ final class HomeViewModel: ObservableObject {
     private func handleFetchMorePicturesSuccess(with responses: [Home.Response], date: String) {
         guard lastRequestedDate == date else { return }
         
+        let favorites = dataProvider.fetchFavorites()
+        let favoriteDates: Set<String> = Set(favorites.map { $0.date } ?? [])
+        
         let responsesSorted = responses
             .sorted { lhs, rhs in
                 return lhs.date.toDate() > rhs.date.toDate()
@@ -128,7 +153,7 @@ final class HomeViewModel: ObservableObject {
                 title: $0.title,
                 description: $0.explanation,
                 imageUrl: $0.imageURL ?? URL(string: "https://picsum.photos/300/200")!,
-                favorite: false
+                favorite: favoriteDates.contains($0.date)
             )
         }
 
@@ -139,11 +164,39 @@ final class HomeViewModel: ObservableObject {
     }
     
     func didTouchFavoriteButton(picture: HomeData.Picture) {
-        dataProvider.saveFavorite(response: Home.Response(
-            title: picture.title,
-            explanation: picture.description,
-            date: picture.date,
-            imageURL: picture.imageUrl
-        ))
+        guard case .success(var currentData) = model.state else { return }
+
+        var updatedMain = currentData.mainPicture
+        var updatedGrid = currentData.gridPicture
+
+        if picture.favorite {
+            dataProvider.deleteFavorite(date: picture.date)
+        } else {
+            dataProvider.saveFavorite(response: Home.Response(
+                title: picture.title,
+                explanation: picture.description,
+                date: picture.date,
+                imageURL: picture.imageUrl
+            ))
+        }
+
+        if updatedMain.picture.date == picture.date {
+            updatedMain.picture.favorite.toggle()
+        }
+
+        if let index = updatedGrid.pictures.firstIndex(where: { $0.date == picture.date }) {
+            updatedGrid.pictures[index].favorite.toggle()
+        }
+
+        let favorites = dataProvider.fetchFavorites()
+        let newFavoritesList = getFavoritesData(from: favorites)
+
+        currentData = HomeData(
+            mainPicture: updatedMain,
+            favorites: newFavoritesList,
+            gridPicture: updatedGrid
+        )
+
+        model.state = .success(currentData)
     }
 }

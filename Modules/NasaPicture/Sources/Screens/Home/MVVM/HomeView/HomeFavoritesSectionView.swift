@@ -7,63 +7,72 @@ struct HomeFavoritesSectionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(data.headerTitle)
-                    .font(.title2.weight(.semibold))
-                
-                Spacer()
-                
+            headerView()
+            picturesScrollView()
+        }
+        .padding(.top, 16)
+    }
+    
+    private func headerView() -> some View {
+        HStack {
+            Text(data.headerTitle)
+                .font(.title2.weight(.semibold))
+            
+            Spacer()
+            
+            if let buttonTitle = data.buttonTitle {
                 Button(action: {
                     print("Ver todos pressionado")
                 }) {
-                    Text(data.buttonTitle ?? "")
+                    Text(buttonTitle)
                         .font(.footnote.bold())
                 }
             }
-            .padding(.horizontal, horizontalPadding)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(Array(data.pictures.enumerated()), id: \.offset) { index, item in
-                        ZStack(alignment: .topTrailing) {
-                            URLImage(url: item.imageUrl, cornerRadius: 0)
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 160, height: 160)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                            
-                            Button(action: {
-                                touchFavoriteButton(item)
-                            }) {
-                                Image(systemName: item.favorite ? "heart.fill" : "heart")
-                                    .foregroundColor(item.favorite ? .red : .white)
-                                    .padding(6)
-                                    .background(Color.black.opacity(0.3))
-                                    .clipShape(Circle())
-                                    .padding(6)
-                            }
-                            
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    Text(item.date)
-                                        .font(.caption2)
-                                        .foregroundColor(.white)
-                                        .padding(6)
-                                        .background(Color.black.opacity(0.6))
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        .padding(6)
-                                    Spacer()
-                                }
-                            }
-                        }
-                        .frame(width: 160, height: 160)
-                    }
+        }
+        .padding(.horizontal, horizontalPadding)
+    }
+    
+    private func picturesScrollView() -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(data.pictures, id: \.date) { picture in
+                    pictureCardView(picture)
                 }
-                .padding(.horizontal, horizontalPadding)
+            }
+            .padding(.horizontal, horizontalPadding)
+        }
+    }
+    
+    private func pictureCardView(_ picture: HomeData.Picture) -> some View {
+        ZStack(alignment: .topTrailing) {
+            URLImage(url: picture.imageUrl, cornerRadius: 0)
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 160, height: 160)
+                .clipped()
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            
+            FavoriteButtonView(
+                favorite: picture.favorite,
+                action: {
+                    touchFavoriteButton(picture)
+                }
+            )
+            
+            VStack {
+                Spacer()
+                HStack {
+                    Text(picture.date)
+                        .font(.caption2)
+                        .foregroundColor(.white)
+                        .padding(6)
+                        .background(Color.black.opacity(0.6))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(6)
+                    Spacer()
+                }
             }
         }
-        .padding(.top, 16)
+        .frame(width: 160, height: 160)
     }
 }
 
@@ -84,7 +93,7 @@ struct HomeFavoritesSectionView: View {
         ),
         horizontalPadding: 24,
         touchFavoriteButton: { picture in
-            print(picture)
+            print("Touch favorite:", picture)
         }
     )
 }

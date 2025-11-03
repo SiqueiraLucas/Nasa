@@ -25,7 +25,7 @@ struct HomeData {
     
     struct MainPicture {
         let headerTitle: String
-        let picture: Picture
+        var picture: Picture
     }
     
     struct PictureList {

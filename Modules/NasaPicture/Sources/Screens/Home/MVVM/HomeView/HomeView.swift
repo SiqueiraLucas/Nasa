@@ -12,75 +12,102 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            VStack(alignment: .leading, spacing: 16) {
-                HomeHeaderView(header: viewModel.model.header, horizontalPadding: horizontalPadding) {
-                    showDatePicker = true
-                }
-                
-                Divider().background(Color.gray).padding(.horizontal, horizontalPadding)
-                
-                ZStack {
-                    switch viewModel.model.state {
-                    case .loading:
-                        LoadingView()
-                    case .error(let data):
-                        ErrorView(data: data)
-                    case .success(let data):
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 16) {
-                                HomeMainPictureView(
-                                    data: data.mainPicture,
-                                    horizontalPadding: horizontalPadding,
-                                    touchFavoriteButton: { picture in
-                                        viewModel.didTouchFavoriteButton(picture: picture)
-                                    }
-                                )
-                                
-                                if let favorites = data.favorites {
-                                    HomeFavoritesSectionView(
-                                        data: favorites,
-                                        horizontalPadding: horizontalPadding,
-                                        touchFavoriteButton: { picture in
-                                            viewModel.didTouchFavoriteButton(picture: picture)
-                                        }
-                                    )
-                                }
-                                
-                                HomeGridSectionView(
-                                    data: data.gridPicture,
-                                    horizontalPadding: horizontalPadding,
-                                    onLoadMore: { date in
-                                        viewModel.loadMore(date: date)
-                                    },
-                                    touchFavoriteButton: { picture in
-                                        viewModel.didTouchFavoriteButton(picture: picture)
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            mainContent()
             
             if showDatePicker {
-                DatePickerDialog(
-                    minimumDate: viewModel.model.datePicker.minimumDate,
-                    maximumDate: viewModel.model.datePicker.maximumDate,
-                    currentDate: viewModel.model.header.date.toDate(),
-                    isPresented: $showDatePicker
-                ) { newDate in
-                    viewModel.newDateSelected(newDate.toString())
-                }
+                datePickerView()
             }
         }
         .background(Color(.systemBackground))
         .onAppear {
-            Task {
-                await viewModel.build()
+            viewModel.build()
+        }
+    }
+    
+    private func mainContent() -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            headerView()
+            
+            Divider().background(Color.gray)
+                .padding(.horizontal, horizontalPadding)
+            
+            contentView()
+        }
+    }
+    
+    private func headerView() -> some View {
+        HomeHeaderView(header: viewModel.model.header, horizontalPadding: horizontalPadding) {
+            showDatePicker = true
+        }
+    }
+    
+    @ViewBuilder
+    private func contentView() -> some View {
+        switch viewModel.model.state {
+        case .loading:
+            LoadingView()
+        case .error(let data):
+            ErrorView(data: data)
+        case .success(let data):
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    mainPictureView(data.mainPicture)
+                    
+                    if let favorites = data.favorites {
+                        favoritesSectionView(favorites)
+                    }
+                    
+                    gridSectionView(data.gridPicture)
+                }
             }
         }
     }
+    
+    private func mainPictureView(_ data: HomeData.MainPicture) -> some View {
+        HomeMainPictureView(
+            data: data,
+            horizontalPadding: horizontalPadding,
+            touchFavoriteButton: { picture in
+                viewModel.didTouchFavoriteButton(picture: picture)
+            }
+        )
+    }
+    
+    private func favoritesSectionView(_ data: HomeData.PictureList) -> some View {
+        HomeFavoritesSectionView(
+            data: data,
+            horizontalPadding: horizontalPadding,
+            touchFavoriteButton: { picture in
+                viewModel.didTouchFavoriteButton(picture: picture)
+            }
+        )
+    }
+    
+    private func gridSectionView(_ data: HomeData.PictureList) -> some View {
+        HomeGridSectionView(
+            data: data,
+            horizontalPadding: horizontalPadding,
+            onLoadMore: { date in
+                viewModel.loadMore(date: date)
+            },
+            touchFavoriteButton: { picture in
+                viewModel.didTouchFavoriteButton(picture: picture)
+            }
+        )
+    }
+    
+    private func datePickerView() -> some View {
+        DatePickerDialog(
+            minimumDate: viewModel.model.datePicker.minimumDate,
+            maximumDate: viewModel.model.datePicker.maximumDate,
+            currentDate: viewModel.model.header.date.toDate(),
+            isPresented: $showDatePicker
+        ) { newDate in
+            viewModel.newDateSelected(newDate.toString())
+        }
+    }
 }
+
 
 #if DEBUG
 import SwiftUI
@@ -107,7 +134,6 @@ struct HomeView_Previews: PreviewProvider {
         func fetchFavorites() -> [Home.Response] { return [] }
         func saveFavorite(response: Home.Response) {}
         func deleteFavorite(date: String) {}
-        func fetchFavorites() {}
     }
     
     static var previews: some View {

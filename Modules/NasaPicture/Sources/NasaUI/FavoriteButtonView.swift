@@ -1,21 +1,15 @@
 import SwiftUI
 
 struct FavoriteButtonView: View {
-    let action: () -> Void
-    @State private var isFavorite: Bool
-
-    init(favorite: Bool, action: @escaping () -> Void) {
-        self._isFavorite = State(initialValue: favorite)
-        self.action = action
-    }
+    let favorite: Bool
+    var action: () -> Void
 
     var body: some View {
         Button {
-            isFavorite.toggle()
             action()
         } label: {
-            Image(systemName: isFavorite ? "heart.fill" : "heart")
-                .foregroundColor(isFavorite ? .red : .white)
+            Image(systemName: favorite ? "heart.fill" : "heart")
+                .foregroundColor(favorite ? .red : .white)
                 .padding(6)
                 .background(Color.black.opacity(0.3))
                 .clipShape(Circle())
@@ -23,6 +17,7 @@ struct FavoriteButtonView: View {
         }
     }
 }
+
 
 #Preview {
     FavoriteButtonView(
