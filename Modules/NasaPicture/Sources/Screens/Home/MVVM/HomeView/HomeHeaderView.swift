@@ -19,7 +19,7 @@ struct HomeHeaderView: View {
                     Text(header.date)
                         .font(.callout.bold())
 
-                    Image(systemName: "line.3.horizontal.decrease.circle")
+                    Image(systemName: "line.3.horizontal.decrease")
                         .font(.callout)
                 }
                 .padding(.top, 4)

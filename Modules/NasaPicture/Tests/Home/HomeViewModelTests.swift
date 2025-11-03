@@ -3,6 +3,7 @@ import SwiftUI
 import Combine
 import PromiseKit
 import NasaNetworkInterface
+import NasaUI
 @testable import NasaPicture
 
 final class HomeViewModelTests: XCTestCase {
@@ -262,4 +263,60 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertFalse(dataProvider.fetchPicturesCalled)
         XCTAssertEqual(viewModel.model.header.date, "2025-10-01")
     }
+    
+    func test_checkFavorites_updatesStateWhenFavoritesChange() {
+        // Given
+        let mainPicture = HomeData.Picture(
+            date: "2025-10-01",
+            title: "Title1",
+            description: "Desc1",
+            imageUrl: URL(string: "https://example.com")!,
+            favorite: false
+        )
+        let gridPictures = [
+            HomeData.Picture(
+                date: "2025-09-30",
+                title: "Title2",
+                description: "Desc2",
+                imageUrl: URL(string: "https://example.com")!,
+                favorite: false
+            ),
+            HomeData.Picture(
+                date: "2025-09-29",
+                title: "Title3",
+                description: "Desc3",
+                imageUrl: URL(string: "https://example.com")!,
+                favorite: false
+            )
+        ]
+        
+        let initialData = HomeData(
+            mainPicture: HomeData.MainPicture(headerTitle: "Foto do dia", picture: mainPicture),
+            favorites: nil,
+            gridPicture: HomeData.PictureList(headerTitle: "Outras fotos", buttonTitle: nil, pictures: gridPictures)
+        )
+        
+        viewModel.model.state = .success(initialData)
+
+        dataProvider.favoritesResponse = [
+            Home.Response(title: "Title1", explanation: "Desc1", date: "2025-10-01", imageURL: nil),
+            Home.Response(title: "Title3", explanation: "Desc3", date: "2025-09-29", imageURL: nil)
+        ]
+        
+        // When
+        viewModel.checkFavorites()
+        
+        // Then
+        guard case .success(let updatedData) = viewModel.model.state else {
+            XCTFail("Expected success state"); return
+        }
+        
+        // MainPicture atualizado
+        XCTAssertTrue(updatedData.mainPicture.picture.favorite)
+        
+        // GridPicture atualizado
+        XCTAssertTrue(updatedData.gridPicture.pictures[0].favorite == false) // Title2
+        XCTAssertTrue(updatedData.gridPicture.pictures[1].favorite == true)  // Title3
+    }
+
 }

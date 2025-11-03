@@ -4,13 +4,14 @@ import NasaUI
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
     @State private var showDatePicker = false
-    
+    @State private var didAppearOnce = false
+
     private let horizontalPadding: CGFloat = 24
-    
+
     init(viewModel: HomeViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         ZStack {
             mainContent()
@@ -22,7 +23,12 @@ struct HomeView: View {
         .background(Color(.systemBackground))
         .navigationBarHidden(true)
         .onAppear {
-            viewModel.build()
+            if didAppearOnce {
+                viewModel.checkFavorites()
+            } else {
+                viewModel.build()
+                didAppearOnce = true
+            }
         }
     }
     
@@ -51,7 +57,7 @@ struct HomeView: View {
         case .error(let data):
             ErrorView(data: data)
         case .success(let data):
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
                     mainPictureView(data.mainPicture)
                     

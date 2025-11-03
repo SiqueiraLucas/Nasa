@@ -205,6 +205,41 @@ final class HomeViewModel: ObservableObject {
         model.state = .success(currentData)
     }
     
+    func checkFavorites() {
+        guard case .success(var currentData) = model.state else { return }
+
+        let favorites = dataProvider.fetchFavorites()
+        let favoriteDates: Set<String> = Set(favorites.map { $0.date })
+
+        var didChange = false
+
+        var updatedMain = currentData.mainPicture
+        let mainFavorite = favoriteDates.contains(updatedMain.picture.date)
+        if updatedMain.picture.favorite != mainFavorite {
+            updatedMain.picture.favorite = mainFavorite
+            didChange = true
+        }
+
+        var updatedGrid = currentData.gridPicture
+        for i in 0..<updatedGrid.pictures.count {
+            let isFavorite = favoriteDates.contains(updatedGrid.pictures[i].date)
+            if updatedGrid.pictures[i].favorite != isFavorite {
+                updatedGrid.pictures[i].favorite = isFavorite
+                didChange = true
+            }
+        }
+
+        if didChange {
+            currentData = HomeData(
+                mainPicture: updatedMain,
+                favorites: getFavoritesData(from: favorites),
+                gridPicture: updatedGrid
+            )
+            model.state = .success(currentData)
+        }
+    }
+
+    
     func didTouchPicture(picture: HomeData.Picture) {
         coordinator.navigateToPictureDetail(picture: picture)
     }

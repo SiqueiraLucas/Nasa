@@ -35,7 +35,7 @@ struct PictureDetailView: View {
     
     @ViewBuilder
     private func contentView() -> some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(alignment: .leading) {
                 pictureView(viewModel.model.picture)
                 

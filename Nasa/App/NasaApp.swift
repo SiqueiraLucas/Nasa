@@ -41,9 +41,6 @@ struct NasaApp: App {
     }
 }
 
-import SwiftUI
-import UIKit
-
 struct RootHostingController: UIViewControllerRepresentable {
     let rootView: AnyView
     let navigationController: UINavigationController
@@ -56,6 +53,10 @@ struct RootHostingController: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UINavigationController {
         let hosting = UIHostingController(rootView: rootView)
         navigationController.viewControllers = [hosting]
+        let backImage = UIImage(systemName: "arrow.left")
+        navigationController.navigationBar.backIndicatorImage = backImage
+        navigationController.navigationBar.backIndicatorTransitionMaskImage = backImage
+        navigationController.navigationBar.topItem?.backButtonDisplayMode = .minimal
         return navigationController
     }
 
