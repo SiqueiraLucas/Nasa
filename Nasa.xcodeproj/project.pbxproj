@@ -54,16 +54,6 @@
 			path = Nasa;
 			sourceTree = "<group>";
 		};
-		3A904BEA2EB44899005A0EF8 /* NasaTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NasaTests;
-			sourceTree = "<group>";
-		};
-		3A904BF42EB44899005A0EF8 /* NasaUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NasaUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,8 +88,6 @@
 			isa = PBXGroup;
 			children = (
 				3A904BD02EB44898005A0EF8 /* Nasa */,
-				3A904BEA2EB44899005A0EF8 /* NasaTests */,
-				3A904BF42EB44899005A0EF8 /* NasaUITests */,
 				3A904BCF2EB44898005A0EF8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -155,9 +143,6 @@
 			dependencies = (
 				3A904BE92EB44899005A0EF8 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				3A904BEA2EB44899005A0EF8 /* NasaTests */,
-			);
 			name = NasaTests;
 			packageProductDependencies = (
 			);
@@ -177,9 +162,6 @@
 			);
 			dependencies = (
 				3A904BF32EB44899005A0EF8 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				3A904BF42EB44899005A0EF8 /* NasaUITests */,
 			);
 			name = NasaUITests;
 			packageProductDependencies = (

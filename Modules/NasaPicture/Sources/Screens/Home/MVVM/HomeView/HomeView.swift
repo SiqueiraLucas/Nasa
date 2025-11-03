@@ -138,7 +138,7 @@ struct HomeView_Previews: PreviewProvider {
     
     static var previews: some View {
         let dataProvider = HomeDataProviderPreview()
-        var viewModel = HomeViewModel(dataProvider: dataProvider)
+        let viewModel = HomeViewModel(dataProvider: dataProvider)
         HomeView(viewModel: viewModel)
     }
 }

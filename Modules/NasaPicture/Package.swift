@@ -28,6 +28,14 @@ let package = Package(
             linkerSettings: [
                 .linkedFramework("UIKit")
             ]
+        ),
+        .testTarget(
+            name: "NasaPictureTests",
+            dependencies: [
+                "NasaPicture",
+                "NasaNetworkInterface"
+            ],
+            path: "Tests"
         )
     ]
 )

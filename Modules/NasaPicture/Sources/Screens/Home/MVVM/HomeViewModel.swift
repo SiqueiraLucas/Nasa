@@ -25,8 +25,6 @@ final class HomeViewModel: ObservableObject {
                 let networkError = error as? NetworkError ?? .init(type: .unknown)
                 self?.handleFetchError(with: networkError, date: currentDate)
             }
-        
-        dataProvider.fetchFavorites()
     }
     
     private func getDateAgo(from currentDate: String, days: Int) -> String {
@@ -41,7 +39,7 @@ final class HomeViewModel: ObservableObject {
         guard lastRequestedDate == date else { return }
         
         let favorites = dataProvider.fetchFavorites()
-        let favoriteDates: Set<String> = Set(favorites.map { $0.date } ?? [])
+        let favoriteDates: Set<String> = Set(favorites.map { $0.date })
 
         guard let mainResponse = responses.first(where: { $0.date == date }) else {
             return
@@ -133,14 +131,14 @@ final class HomeViewModel: ObservableObject {
         dataProvider.fetchPictures(startDate: startDate, endDate: currentDate)
             .done { [weak self] response in
                 self?.handleFetchMorePicturesSuccess(with: response, date: currentDate)
-            }
+            }.catch { _ in }
     }
     
     private func handleFetchMorePicturesSuccess(with responses: [Home.Response], date: String) {
         guard lastRequestedDate == date else { return }
         
         let favorites = dataProvider.fetchFavorites()
-        let favoriteDates: Set<String> = Set(favorites.map { $0.date } ?? [])
+        let favoriteDates: Set<String> = Set(favorites.map { $0.date })
         
         let responsesSorted = responses
             .sorted { lhs, rhs in
