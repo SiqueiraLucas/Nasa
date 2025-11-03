@@ -1,34 +1,36 @@
 import Foundation
-import NasaNetworkInterface
 import PromiseKit
+import NasaNetworkInterface
 @testable import NasaPicture
 
 final class HomeDataProviderSpy: HomeDataProviderProtocol {
-    var picturesResponse: [NasaPicture.Home.Response]?
-    var favoritesResponse: [NasaPicture.Home.Response]?
-
-    var fetchPicturesCalled: Bool = false
-    var fetchFavoritesCalled: Bool = false
-    var saveFavoriteCalled: Bool = false
-    var deleteFavoriteCalled: Bool = false
+    var fetchPicturesCalled = false
+    var saveFavoriteCalled = false
+    var deleteFavoriteCalled = false
     
-    func fetchPictures(startDate: String, endDate: String) -> PromiseKit.Promise<[NasaPicture.Home.Response]> {
+    var picturesResponse: [Home.Response]?
+    var favoritesResponse: [Home.Response] = []
+    var shouldFailFetch = false
+    
+    func fetchPictures(startDate: String, endDate: String) -> Promise<[Home.Response]> {
         fetchPicturesCalled = true
         
-        return PromiseKit.Promise<[NasaPicture.Home.Response]>.init { resolver in
-            guard let picturesResponse = picturesResponse else {
-                return resolver.reject(NetworkError(type: .internalError))
-            }
-            resolver.fulfill(picturesResponse)
+        if shouldFailFetch {
+            return Promise(error: NetworkError(type: .internalError))
+        }
+        
+        if let response = picturesResponse {
+            return Promise.value(response)
+        } else {
+            return Promise(error: NetworkError(type: .internalError))
         }
     }
     
-    func fetchFavorites() -> [NasaPicture.Home.Response] {
-        fetchFavoritesCalled = true
-        return favoritesResponse ?? []
+    func fetchFavorites() -> [Home.Response] {
+        return favoritesResponse
     }
     
-    func saveFavorite(response: NasaPicture.Home.Response) {
+    func saveFavorite(response: Home.Response) {
         saveFavoriteCalled = true
     }
     

@@ -3,8 +3,14 @@ import NasaNetworkInterface
 @testable import NasaPicture
 
 final class PictureDetailDataProviderSpy: PictureDetailDataProviderProtocol {
+    var fetchFavoritesCalled: Bool = false
     var saveFavoriteCalled: Bool = false
     var deleteFavoriteCalled: Bool = false
+    
+    func fetchFavorites() -> [NasaPicture.Home.Response] {
+        fetchFavoritesCalled = true
+        return []
+    }
     
     func saveFavorite(response: NasaPicture.Home.Response) {
         saveFavoriteCalled = true

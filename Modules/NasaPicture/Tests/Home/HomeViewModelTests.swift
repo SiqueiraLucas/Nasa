@@ -147,4 +147,119 @@ final class HomeViewModelTests: XCTestCase {
         // Then
         XCTAssertTrue(coordinator.navigateToPictureDetailCalled)
     }
+    
+    func test_didTouchAllFavorite() {
+        // When
+        viewModel.didTouchAllFavorite()
+        
+        // Then
+        XCTAssertTrue(coordinator.navigateToAllFavoriteCalled)
+    }
+    
+    func test_loadMore_appendsNewPicturesToGrid() {
+        // Given
+        let initialResponses = [
+            Home.Response(title: "Title1", explanation: "Exp1", date: "2025-10-01", imageURL: nil),
+            Home.Response(title: "Title2", explanation: "Exp2", date: "2025-09-30", imageURL: nil)
+        ]
+        dataProvider.picturesResponse = initialResponses
+        
+        // Inicializa o estado com duas fotos
+        viewModel.build()
+        
+        let buildExpectation = expectation(description: "Build finished")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { buildExpectation.fulfill() }
+        wait(for: [buildExpectation], timeout: 1)
+        
+        guard case .success(let initialData) = viewModel.model.state else {
+            XCTFail("Expected success state"); return
+        }
+        XCTAssertEqual(initialData.gridPicture.pictures.count, 1)
+        
+        // When
+        let newResponses = [
+            Home.Response(title: "Title3", explanation: "Exp3", date: "2025-09-29", imageURL: nil),
+            Home.Response(title: "Title4", explanation: "Exp4", date: "2025-09-28", imageURL: nil)
+        ]
+        dataProvider.picturesResponse = newResponses
+        
+        viewModel.loadMore(date: "2025-09-30")
+        
+        // Then
+        let loadMoreExpectation = expectation(description: "Load more finished")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { loadMoreExpectation.fulfill() }
+        wait(for: [loadMoreExpectation], timeout: 1)
+        
+        guard case .success(let updatedData) = viewModel.model.state else {
+            XCTFail("Expected success state after loadMore"); return
+        }
+        
+        XCTAssertTrue(dataProvider.fetchPicturesCalled)
+        XCTAssertEqual(updatedData.gridPicture.pictures.count, 3) // 1 anterior + 2 novos
+        XCTAssertEqual(updatedData.gridPicture.pictures.last?.title, "Title4")
+    }
+        
+    func test_loadMore_doesNotAppendIfPromiseFails() {
+        // Given
+        let initialResponses = [
+            Home.Response(title: "Title1", explanation: "Exp1", date: "2025-10-01", imageURL: nil)
+        ]
+        dataProvider.picturesResponse = initialResponses
+        
+        viewModel.build()
+        let buildExpectation = expectation(description: "Build finished")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { buildExpectation.fulfill() }
+        wait(for: [buildExpectation], timeout: 1)
+        
+        guard case .success(let initialData) = viewModel.model.state else {
+            XCTFail("Expected success state"); return
+        }
+        XCTAssertEqual(initialData.gridPicture.pictures.count, 0)
+        
+        // When — simula erro na chamada
+        dataProvider.shouldFailFetch = true
+        
+        viewModel.loadMore(date: "2025-09-30")
+        
+        // Then
+        let loadMoreExpectation = expectation(description: "Load more finished")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { loadMoreExpectation.fulfill() }
+        wait(for: [loadMoreExpectation], timeout: 1)
+        
+        guard case .success(let updatedData) = viewModel.model.state else {
+            XCTFail("Expected success state to remain"); return
+        }
+        
+        XCTAssertEqual(updatedData.gridPicture.pictures.count, 0)
+    }
+    
+    func test_newDateSelected_callsBuildWhenDateChanges() {
+        // Given
+        dataProvider.picturesResponse = [
+            Home.Response(title: "Title1", explanation: "Exp1", date: "2025-10-01", imageURL: nil)
+        ]
+        viewModel.model.header.date = "2025-10-01"
+        
+        // Spy para saber se build foi chamado (via fetchPictures)
+        XCTAssertFalse(dataProvider.fetchPicturesCalled)
+        
+        // When
+        viewModel.newDateSelected("2025-10-02")
+        
+        // Then
+        XCTAssertTrue(dataProvider.fetchPicturesCalled)
+        XCTAssertEqual(viewModel.model.header.date, "2025-10-02")
+    }
+    
+    func test_newDateSelected_doesNotCallBuildWhenDateIsSame() {
+        // Given
+        viewModel.model.header.date = "2025-10-01"
+        
+        // When
+        viewModel.newDateSelected("2025-10-01")
+        
+        // Then
+        XCTAssertFalse(dataProvider.fetchPicturesCalled)
+        XCTAssertEqual(viewModel.model.header.date, "2025-10-01")
+    }
 }
