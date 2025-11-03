@@ -35,5 +35,4 @@ final class HomeDataProviderSpy: HomeDataProviderProtocol {
     func deleteFavorite(date: String) {
         deleteFavoriteCalled = true
     }
-    
 }

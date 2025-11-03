@@ -17,9 +17,6 @@ final class PictureDetailViewModel: ObservableObject {
         self.model = PictureDetailModel(picture: picture)
     }
     
-    func build() {
-    }
-    
     func didTouchFavoriteButton(picture: HomeData.Picture) {
         if picture.favorite {
             dataProvider.deleteFavorite(date: picture.date)

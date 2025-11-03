@@ -16,9 +16,6 @@ struct PictureDetailView: View {
         }
         .background(Color(.systemBackground))
         .navigationBarHidden(false)
-        .onAppear {
-            viewModel.build()
-        }
     }
     
     private func mainContent() -> some View {

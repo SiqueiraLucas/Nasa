@@ -8,12 +8,17 @@ import NasaNetworkInterface
 final class HomeViewModelTests: XCTestCase {
     private var viewModel: HomeViewModel!
     private var dataProvider: HomeDataProviderSpy!
+    private var coordinator: HomeCoordinatorSpy!
     private var cancellables: Set<AnyCancellable>!
 
     override func setUp() {
         super.setUp()
         dataProvider = HomeDataProviderSpy()
-        viewModel = HomeViewModel(dataProvider: dataProvider)
+        coordinator = HomeCoordinatorSpy()
+        viewModel = HomeViewModel(
+            dataProvider: dataProvider,
+            coordinator: coordinator
+        )
         cancellables = []
     }
     
@@ -130,5 +135,16 @@ final class HomeViewModelTests: XCTestCase {
             XCTFail("Expected success state after delete favorite"); return
         }
         XCTAssertFalse(updatedData.mainPicture.picture.favorite)
+    }
+    
+    func test_didTouchPicture() {
+        // Given
+        let picture = HomeData.Picture(date: "", title: "", description: "", imageUrl: URL(string: "https://example.com")!, favorite: false)
+        
+        // When
+        viewModel.didTouchPicture(picture: picture)
+        
+        // Then
+        XCTAssertTrue(coordinator.navigateToPictureDetailCalled)
     }
 }
