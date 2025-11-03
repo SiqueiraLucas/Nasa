@@ -1,15 +1,6 @@
 {
-  "originHash" : "51aec1d8b508fc441e6f8740691cdda8604fa82788526a1f855b42088507b408",
+  "originHash" : "3f791c01fb46d54719487655a99e3a094f1cbdd14f3d55f0b36e093fb268c86a",
   "pins" : [
-    {
-      "identity" : "cartography",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/robb/Cartography.git",
-      "state" : {
-        "revision" : "b75197ea134f42b5feafb04b526b37eb1a41034b",
-        "version" : "4.0.0"
-      }
-    },
     {
       "identity" : "logviewer",
       "kind" : "remoteSourceControl",

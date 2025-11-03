@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A63C69D2EB541CB00AFDA19 /* NasaPicture in Frameworks */ = {isa = PBXBuildFile; productRef = 3A63C69C2EB541CB00AFDA19 /* NasaPicture */; };
 		3A904C392EB46636005A0EF8 /* NasaNetworkInterface in Frameworks */ = {isa = PBXBuildFile; productRef = 3A904C382EB46636005A0EF8 /* NasaNetworkInterface */; };
 		3A904C3C2EB466C1005A0EF8 /* NasaNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 3A904C3B2EB466C1005A0EF8 /* NasaNetwork */; };
+		3ABF0A3E2EB8597100AB943B /* NasaPicture in Frameworks */ = {isa = PBXBuildFile; productRef = 3ABF0A3D2EB8597100AB943B /* NasaPicture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,7 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A904C3C2EB466C1005A0EF8 /* NasaNetwork in Frameworks */,
-				3A63C69D2EB541CB00AFDA19 /* NasaPicture in Frameworks */,
+				3ABF0A3E2EB8597100AB943B /* NasaPicture in Frameworks */,
 				3A904C392EB46636005A0EF8 /* NasaNetworkInterface in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +136,7 @@
 			packageProductDependencies = (
 				3A904C382EB46636005A0EF8 /* NasaNetworkInterface */,
 				3A904C3B2EB466C1005A0EF8 /* NasaNetwork */,
-				3A63C69C2EB541CB00AFDA19 /* NasaPicture */,
+				3ABF0A3D2EB8597100AB943B /* NasaPicture */,
 			);
 			productName = Nasa;
 			productReference = 3A904BCE2EB44898005A0EF8 /* Nasa.app */;
@@ -223,7 +223,7 @@
 			packageReferences = (
 				3A904C372EB46636005A0EF8 /* XCLocalSwiftPackageReference "Modules/NasaNetworkInterface" */,
 				3A904C3A2EB466C1005A0EF8 /* XCLocalSwiftPackageReference "Modules/NasaNetwork" */,
-				3A63C69B2EB541CB00AFDA19 /* XCLocalSwiftPackageReference "Modules/NasaPicture" */,
+				3ABF0A3C2EB8597100AB943B /* XCLocalSwiftPackageReference "Modules/NasaPicture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A904BCF2EB44898005A0EF8 /* Products */;
@@ -596,10 +596,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		3A63C69B2EB541CB00AFDA19 /* XCLocalSwiftPackageReference "Modules/NasaPicture" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/NasaPicture;
-		};
 		3A904C372EB46636005A0EF8 /* XCLocalSwiftPackageReference "Modules/NasaNetworkInterface" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Modules/NasaNetworkInterface;
@@ -608,13 +604,13 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Modules/NasaNetwork;
 		};
+		3ABF0A3C2EB8597100AB943B /* XCLocalSwiftPackageReference "Modules/NasaPicture" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/NasaPicture;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3A63C69C2EB541CB00AFDA19 /* NasaPicture */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = NasaPicture;
-		};
 		3A904C382EB46636005A0EF8 /* NasaNetworkInterface */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NasaNetworkInterface;
@@ -622,6 +618,10 @@
 		3A904C3B2EB466C1005A0EF8 /* NasaNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NasaNetwork;
+		};
+		3ABF0A3D2EB8597100AB943B /* NasaPicture */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NasaPicture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

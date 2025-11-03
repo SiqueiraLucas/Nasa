@@ -14,17 +14,12 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../NasaNetworkInterface"),
-        .package(
-            url: "https://github.com/robb/Cartography.git",
-            from: "4.0.0"
-        )
     ],
     targets: [
         .target(
             name: "NasaPicture",
             dependencies: [
-                "NasaNetworkInterface",
-                "Cartography"
+                "NasaNetworkInterface"
             ],
             path: "Sources",
             swiftSettings: [
