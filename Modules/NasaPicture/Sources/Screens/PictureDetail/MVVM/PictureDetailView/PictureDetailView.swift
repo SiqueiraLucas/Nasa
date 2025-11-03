@@ -1,4 +1,5 @@
 import SwiftUI
+import NasaUI
 
 struct PictureDetailView: View {
     @StateObject var viewModel: PictureDetailViewModel

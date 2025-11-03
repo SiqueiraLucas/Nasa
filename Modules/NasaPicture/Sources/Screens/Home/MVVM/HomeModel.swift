@@ -1,4 +1,5 @@
 import Foundation
+import NasaUtils
 
 struct HomeModel: BaseModel {
     var header = HeaderData(date: "2025-10-01")

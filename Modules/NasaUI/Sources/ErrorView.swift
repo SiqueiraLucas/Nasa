@@ -5,6 +5,18 @@ public struct ErrorData {
     public let description: String
     public let buttonTitle: String?
     public let buttonAction: (() -> Void)?
+    
+    public init(
+        title: String,
+        description: String,
+        buttonTitle: String?,
+        buttonAction: (() -> Void)?
+    ) {
+        self.title = title
+        self.description = description
+        self.buttonTitle = buttonTitle
+        self.buttonAction = buttonAction
+    }
 }
 
 public struct ErrorView: View {

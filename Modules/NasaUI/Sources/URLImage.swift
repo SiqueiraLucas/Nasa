@@ -3,8 +3,17 @@ import SwiftUI
 public struct URLImage: View {
     public let url: URL
     public let cornerRadius: CGFloat
-    public var enableFullScreen: Bool = false
-    public var customTap: (() -> Void)? = nil
+    
+    public init(
+        url: URL,
+        cornerRadius: CGFloat
+    ) {
+        self.url = url
+        self.cornerRadius = cornerRadius
+    }
+    
+    var enableFullScreen: Bool = false
+    var customTap: (() -> Void)? = nil
 
     @State private var loadedImage: UIImage?
     @State private var isLoading = false
@@ -64,13 +73,13 @@ public struct URLImage: View {
 }
 
 public extension URLImage {
-    func onCustomTap(_ customTap: @escaping () -> Void) -> URLImage {
+    public func onCustomTap(_ customTap: @escaping () -> Void) -> URLImage {
         var copy = self
         copy.customTap = customTap
         return copy
     }
 
-    func onFullScreenTap(_ enabled: Bool = true) -> URLImage {
+    public func onFullScreenTap(_ enabled: Bool = true) -> URLImage {
         var copy = self
         copy.enableFullScreen = enabled
         return copy

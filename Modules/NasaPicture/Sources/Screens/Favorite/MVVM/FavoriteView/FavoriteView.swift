@@ -1,4 +1,5 @@
 import SwiftUI
+import NasaUI
 
 struct FavoriteView: View {
     @StateObject var viewModel: FavoriteViewModel

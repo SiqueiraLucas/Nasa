@@ -14,12 +14,16 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../NasaNetworkInterface"),
+        .package(path: "../NasaUI"),
+        .package(path: "../NasaUtils"),
     ],
     targets: [
         .target(
             name: "NasaPicture",
             dependencies: [
-                "NasaNetworkInterface"
+                "NasaNetworkInterface",
+                "NasaUI",
+                "NasaUtils"
             ],
             path: "Sources",
             swiftSettings: [
@@ -33,7 +37,9 @@ let package = Package(
             name: "NasaPictureTests",
             dependencies: [
                 "NasaPicture",
-                "NasaNetworkInterface"
+                "NasaNetworkInterface",
+                "NasaUI",
+                "NasaUtils"
             ],
             path: "Tests"
         )

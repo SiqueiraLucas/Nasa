@@ -1,10 +1,18 @@
 import SwiftUI
 
-struct FavoriteButtonView: View {
-    let favorite: Bool
-    var action: () -> Void
+public struct FavoriteButtonView: View {
+    public let favorite: Bool
+    public var action: () -> Void
+    
+    public init(
+        favorite: Bool,
+        action: @escaping () -> Void
+    ) {
+        self.favorite = favorite
+        self.action = action
+    }
 
-    var body: some View {
+    public var body: some View {
         Button {
             action()
         } label: {

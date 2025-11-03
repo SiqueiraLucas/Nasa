@@ -1,4 +1,5 @@
 import SwiftUI
+import NasaUI
 
 struct HomeGridSectionView: View {
     let data: HomeData.PictureList
@@ -83,3 +84,32 @@ struct HomeGridSectionView: View {
         }
     }
 }
+
+#Preview {
+    HomeGridSectionView(
+        data: HomeData.PictureList(
+            headerTitle: "Outras fotos",
+            buttonTitle: nil,
+            pictures: (1...6).map { _ in
+                HomeData.Picture(
+                    date: "2025-01-0\(Int.random(in: 1...30))",
+                    title: "Title",
+                    description: "Description",
+                    imageUrl: URL(string: "https://picsum.photos/seed/\(UUID().uuidString)/400/300")!,
+                    favorite: false
+                )
+            }
+        ),
+        horizontalPadding: 24,
+        onLoadMore: { date in
+            print("Load more")
+        },
+        touchFavoriteButton: { picture in
+            print("Touch favorite")
+        },
+        touchPicture: { picture in
+            print("Touch picture")
+        }
+    )
+}
+

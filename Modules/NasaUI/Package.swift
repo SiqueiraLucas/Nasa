@@ -2,27 +2,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "NasaNetworkInterface",
+    name: "NasaUI",
     platforms: [
         .iOS(.v14)
     ],
     products: [
         .library(
-            name: "NasaNetworkInterface",
-            targets: ["NasaNetworkInterface"]
+            name: "NasaUI",
+            targets: ["NasaUI"]
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/mxcl/PromiseKit.git",
-            from: "8.1.0"
-        )
     ],
     targets: [
         .target(
-            name: "NasaNetworkInterface",
+            name: "NasaUI",
             dependencies: [
-                "PromiseKit"
             ],
             path: "Sources",
             swiftSettings: [

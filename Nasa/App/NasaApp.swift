@@ -36,7 +36,6 @@ struct NasaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            // Embalando a view inicial do módulo dentro do UINavigationController
             RootHostingController(rootView: pictureFeature.initialView(), navigationController: navigationController)
         }
     }
@@ -61,6 +60,5 @@ struct RootHostingController: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
-        // nada aqui
     }
 }

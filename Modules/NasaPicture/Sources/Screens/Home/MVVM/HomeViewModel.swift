@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 import NasaNetworkInterface
+import NasaUI
 
 final class HomeViewModel: ObservableObject {
     @Published var model = HomeModel()

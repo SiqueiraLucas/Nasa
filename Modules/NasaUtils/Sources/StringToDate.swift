@@ -1,11 +1,11 @@
 import Foundation
 
-extension Date {
-    func toString() -> String {
+public extension String {
+    public func toDate() -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         formatter.timeZone = TimeZone.current
         formatter.locale = Locale.current
-        return formatter.string(from: self)
+        return formatter.date(from: self) ?? Date()
     }
 }
