@@ -1,11 +1,10 @@
 import SwiftUI
 
-protocol HomeCoordinatorProtocol {
+protocol FavoriteCoordinatorProtocol {
     func navigateToPictureDetail(picture: HomeData.Picture)
-    func navigateToAllFavorite()
 }
 
-final class HomeCoordinator: HomeCoordinatorProtocol {
+final class FavoriteCoordinator: FavoriteCoordinatorProtocol {
     private let dependencies: Dependencies
 
     init(dependencies: Dependencies) {
@@ -19,16 +18,6 @@ final class HomeCoordinator: HomeCoordinatorProtocol {
         )
         
         let hosting = UIHostingController(rootView: detailView)
-        hosting.modalPresentationStyle = .fullScreen
-        dependencies.navigationController.pushViewController(hosting, animated: true)
-    }
-    
-    func navigateToAllFavorite() {
-        let favoriteView = Favorite.Initializer.createView(
-            dependencies: dependencies
-        )
-        
-        let hosting = UIHostingController(rootView: favoriteView)
         hosting.modalPresentationStyle = .fullScreen
         dependencies.navigationController.pushViewController(hosting, animated: true)
     }

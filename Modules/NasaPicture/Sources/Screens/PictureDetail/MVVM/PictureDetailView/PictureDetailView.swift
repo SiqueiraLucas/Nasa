@@ -88,6 +88,7 @@ import PromiseKit
 
 struct PictureDetailView_Previews: PreviewProvider {
     class PictureDetailDataProviderPreview: PictureDetailDataProviderProtocol {
+        func fetchFavorites() -> [Home.Response] { return [] }
         func saveFavorite(response: Home.Response) {}
         func deleteFavorite(date: String) {}
     }

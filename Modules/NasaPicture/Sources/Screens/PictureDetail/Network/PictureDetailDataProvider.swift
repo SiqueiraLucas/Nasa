@@ -2,5 +2,5 @@ import Foundation
 import NasaNetworkInterface
 import PromiseKit
 
-typealias PictureDetailDataProviderProtocol = FavoriteDetailDataProviderProtocol
-typealias PictureDetailDataProvider = FavoriteDetailDataProvider
+typealias PictureDetailDataProviderProtocol = FavoriteDataProviderProtocol
+typealias PictureDetailDataProvider = FavoriteDataProvider

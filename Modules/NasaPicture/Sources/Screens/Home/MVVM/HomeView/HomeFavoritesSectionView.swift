@@ -5,6 +5,7 @@ struct HomeFavoritesSectionView: View {
     let horizontalPadding: CGFloat
     var touchFavoriteButton: (_ picture: HomeData.Picture) -> Void
     var touchPicture: (_ picture: HomeData.Picture) -> Void
+    var touchAll: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -23,7 +24,7 @@ struct HomeFavoritesSectionView: View {
             
             if let buttonTitle = data.buttonTitle {
                 Button(action: {
-                    print("Ver todos pressionado")
+                    touchAll()
                 }) {
                     Text(buttonTitle)
                         .font(.footnote.bold())
@@ -54,6 +55,7 @@ struct HomeFavoritesSectionView: View {
                 .frame(width: 160, height: 160)
                 .clipped()
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .contentShape(RoundedRectangle(cornerRadius: 12))
             
             FavoriteButtonView(
                 favorite: picture.favorite,
@@ -101,6 +103,8 @@ struct HomeFavoritesSectionView: View {
         },
         touchPicture: { picture in
             print("Touch picture:", picture)
+        }, touchAll: {
+            print("Touch All")
         }
     )
 }

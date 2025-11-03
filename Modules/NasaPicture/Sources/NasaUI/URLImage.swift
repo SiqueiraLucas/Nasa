@@ -18,7 +18,6 @@ public struct URLImage: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .onTapGesture {
                         if enableFullScreen {
                             showFullScreen = true
@@ -30,6 +29,9 @@ public struct URLImage: View {
                             FullScreenImageView(image: uiImage, isPresented: $showFullScreen)
                         }
                     }
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .contentShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .clipped()
             } else {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(Color.gray.opacity(0.3))

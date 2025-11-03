@@ -207,4 +207,8 @@ final class HomeViewModel: ObservableObject {
     func didTouchPicture(picture: HomeData.Picture) {
         coordinator.navigateToPictureDetail(picture: picture)
     }
+    
+    func didTouchAllFavorite() {
+        coordinator.navigateToAllFavorite()
+    }
 }

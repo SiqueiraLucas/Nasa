@@ -86,6 +86,9 @@ struct HomeView: View {
             },
             touchPicture: { picture in
                 viewModel.didTouchPicture(picture: picture)
+            },
+            touchAll: {
+                viewModel.didTouchAllFavorite()
             }
         )
     }
@@ -147,6 +150,7 @@ struct HomeView_Previews: PreviewProvider {
     }
     
     class HomeCoordinatorPreview: HomeCoordinatorProtocol {
+        func navigateToAllFavorite() {}
         func navigateToPictureDetail(picture: HomeData.Picture) {}
     }
     

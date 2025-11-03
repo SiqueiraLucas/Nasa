@@ -58,6 +58,7 @@ struct HomeGridSectionView: View {
                 .frame(width: imageWidth, height: imageHeight)
                 .clipped()
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .contentShape(RoundedRectangle(cornerRadius: 12))
             
             FavoriteButtonView(
                 favorite: picture.favorite,
