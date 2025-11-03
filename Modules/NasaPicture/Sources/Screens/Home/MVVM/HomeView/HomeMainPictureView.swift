@@ -4,6 +4,7 @@ struct HomeMainPictureView: View {
     let data: HomeData.MainPicture
     let horizontalPadding: CGFloat
     var touchFavoriteButton: (_ picture: HomeData.Picture) -> Void
+    var touchPicture: (_ picture: HomeData.Picture) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -14,6 +15,9 @@ struct HomeMainPictureView: View {
             
             ZStack {
                 URLImage(url: data.picture.imageUrl, cornerRadius: 12)
+                    .onCustomTap {
+                        touchPicture(data.picture)
+                    }
                     .aspectRatio(16/9, contentMode: .fit)
                     .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -70,6 +74,9 @@ struct HomeMainPictureView: View {
         horizontalPadding: 24,
         touchFavoriteButton: { picture in
             print(picture)
+        },
+        touchPicture: { picture in
+            print("Touch picture:", picture)
         }
     )
 }

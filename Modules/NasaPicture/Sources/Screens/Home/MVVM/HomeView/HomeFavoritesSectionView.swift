@@ -4,6 +4,7 @@ struct HomeFavoritesSectionView: View {
     let data: HomeData.PictureList
     let horizontalPadding: CGFloat
     var touchFavoriteButton: (_ picture: HomeData.Picture) -> Void
+    var touchPicture: (_ picture: HomeData.Picture) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -46,6 +47,9 @@ struct HomeFavoritesSectionView: View {
     private func pictureCardView(_ picture: HomeData.Picture) -> some View {
         ZStack(alignment: .topTrailing) {
             URLImage(url: picture.imageUrl, cornerRadius: 0)
+                .onCustomTap {
+                    touchPicture(picture)
+                }
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 160, height: 160)
                 .clipped()
@@ -94,6 +98,9 @@ struct HomeFavoritesSectionView: View {
         horizontalPadding: 24,
         touchFavoriteButton: { picture in
             print("Touch favorite:", picture)
+        },
+        touchPicture: { picture in
+            print("Touch picture:", picture)
         }
     )
 }

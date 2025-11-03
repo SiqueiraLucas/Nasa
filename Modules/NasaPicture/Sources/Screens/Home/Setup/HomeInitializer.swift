@@ -7,7 +7,13 @@ extension Home {
                 httpClient: dependencies.httpClient,
                 dataClient: dependencies.dataClient
             )
-            let viewModel = HomeViewModel(dataProvider: dataProvider)
+            let coordinator = HomeCoordinator(
+                dependencies: dependencies
+            )
+            let viewModel = HomeViewModel(
+                dataProvider: dataProvider,
+                coordinator: coordinator
+            )
             let view = HomeView(viewModel: viewModel)
             return view
         }

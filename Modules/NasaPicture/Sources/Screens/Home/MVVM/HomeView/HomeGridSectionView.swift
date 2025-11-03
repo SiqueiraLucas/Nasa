@@ -5,6 +5,7 @@ struct HomeGridSectionView: View {
     let horizontalPadding: CGFloat
     var onLoadMore: (_ date: String) -> Void
     var touchFavoriteButton: (_ picture: HomeData.Picture) -> Void
+    var touchPicture: (_ picture: HomeData.Picture) -> Void
     
     private let imageHeight: CGFloat = 160
     
@@ -50,6 +51,9 @@ struct HomeGridSectionView: View {
     private func gridItemView(picture: HomeData.Picture, imageWidth: CGFloat) -> some View {
         ZStack(alignment: .topTrailing) {
             URLImage(url: picture.imageUrl, cornerRadius: 0)
+                .onCustomTap {
+                    touchPicture(picture)
+                }
                 .aspectRatio(contentMode: .fill)
                 .frame(width: imageWidth, height: imageHeight)
                 .clipped()

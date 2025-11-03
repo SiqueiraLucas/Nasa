@@ -11,32 +11,56 @@ struct NasaApp: App {
     private let httpClient: HTTPClientProtocol
     private let dataClient: DataClientProtocol
     private let pictureFeature: NasaPicture.Feature
+    private let navigationController: UINavigationController
 
     init() {
-        // Setup HTTP Client
         let baseURL = AppConfig.baseURL
         let defaultQuerys: [String: Any] = ["api_key": AppConfig.apiKey]
         let requestInfo = RequestInfo(baseURL: baseURL, timeoutInterval: 10, defaultQuerys: defaultQuerys)
         httpClient = HTTPClient(requestInfo: requestInfo)
         
-        // Setup Data Client
         dataClient = DataClient(modelName: AppConfig.dataContainerName)
-
-        // Setup Feature
+        
+        navigationController = UINavigationController()
+        
         let dependencies = NasaPicture.Dependencies(
             httpClient: httpClient,
-            dataClient: dataClient
+            dataClient: dataClient,
+            navigationController: navigationController
         )
         pictureFeature = NasaPicture.Feature(dependencies: dependencies)
-
-        // LogViewer
+        
         LogViewerProvider.setEnableInDebug(true)
         LogViewerProvider.setEnableInRelease(false)
     }
 
     var body: some Scene {
         WindowGroup {
-            pictureFeature.initialView()
+            // Embalando a view inicial do módulo dentro do UINavigationController
+            RootHostingController(rootView: pictureFeature.initialView(), navigationController: navigationController)
         }
+    }
+}
+
+import SwiftUI
+import UIKit
+
+struct RootHostingController: UIViewControllerRepresentable {
+    let rootView: AnyView
+    let navigationController: UINavigationController
+
+    init<V: View>(rootView: V, navigationController: UINavigationController) {
+        self.rootView = AnyView(rootView)
+        self.navigationController = navigationController
+    }
+
+    func makeUIViewController(context: Context) -> UINavigationController {
+        let hosting = UIHostingController(rootView: rootView)
+        navigationController.viewControllers = [hosting]
+        return navigationController
+    }
+
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
+        // nada aqui
     }
 }

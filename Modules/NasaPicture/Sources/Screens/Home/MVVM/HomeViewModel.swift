@@ -7,10 +7,16 @@ final class HomeViewModel: ObservableObject {
     @Published var model = HomeModel()
     
     private let dataProvider: HomeDataProviderProtocol
+    private let coordinator: HomeCoordinatorProtocol
+    
     private var lastRequestedDate: String?
     
-    init(dataProvider: HomeDataProviderProtocol) {
+    init(
+        dataProvider: HomeDataProviderProtocol,
+        coordinator: HomeCoordinatorProtocol
+    ) {
         self.dataProvider = dataProvider
+        self.coordinator  = coordinator
     }
     
     func build() {
@@ -196,5 +202,9 @@ final class HomeViewModel: ObservableObject {
         )
 
         model.state = .success(currentData)
+    }
+    
+    func didTouchPicture(picture: HomeData.Picture) {
+        coordinator.navigateToPictureDetail(picture: picture)
     }
 }

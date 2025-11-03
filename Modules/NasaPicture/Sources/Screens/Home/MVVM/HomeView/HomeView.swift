@@ -19,6 +19,7 @@ struct HomeView: View {
             }
         }
         .background(Color(.systemBackground))
+        .navigationBarHidden(true)
         .onAppear {
             viewModel.build()
         }
@@ -69,6 +70,9 @@ struct HomeView: View {
             horizontalPadding: horizontalPadding,
             touchFavoriteButton: { picture in
                 viewModel.didTouchFavoriteButton(picture: picture)
+            },
+            touchPicture: { picture in
+                viewModel.didTouchPicture(picture: picture)
             }
         )
     }
@@ -79,6 +83,9 @@ struct HomeView: View {
             horizontalPadding: horizontalPadding,
             touchFavoriteButton: { picture in
                 viewModel.didTouchFavoriteButton(picture: picture)
+            },
+            touchPicture: { picture in
+                viewModel.didTouchPicture(picture: picture)
             }
         )
     }
@@ -92,6 +99,9 @@ struct HomeView: View {
             },
             touchFavoriteButton: { picture in
                 viewModel.didTouchFavoriteButton(picture: picture)
+            },
+            touchPicture: { picture in
+                viewModel.didTouchPicture(picture: picture)
             }
         )
     }
@@ -136,9 +146,13 @@ struct HomeView_Previews: PreviewProvider {
         func deleteFavorite(date: String) {}
     }
     
+    class HomeCoordinatorPreview: HomeCoordinatorProtocol {
+        func navigateToPictureDetail(picture: HomeData.Picture) {}
+    }
+    
     static var previews: some View {
         let dataProvider = HomeDataProviderPreview()
-        let viewModel = HomeViewModel(dataProvider: dataProvider)
+        let viewModel = HomeViewModel(dataProvider: dataProvider, coordinator: HomeCoordinatorPreview())
         HomeView(viewModel: viewModel)
     }
 }
